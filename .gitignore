@@ -1,0 +1,22 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# System files
+.DS_Store
+
+# Virtual environments
+venv/
+.env/
+
+# Poetry files
+poetry.lock
+
+# Generated files
+*.mp3
+*.jpg
+*.json
+
+# Streamlit files
+.streamlit/
