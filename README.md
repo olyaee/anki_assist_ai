@@ -2,6 +2,15 @@
 
 Generate Anki flashcards from any source language to German using AnkiConnect and OpenAI. This tool creates custom cards with translations, grammar information, examples, images, and audio. It is easily adaptable to other languages as well.
 
+![AI Anki Card Generator](assets/gifs/demo.gif)
+
+<p align="left">
+   <img src="assets/screenshots/image.png" alt="Picture 1" width="150"/>
+   <img src="assets/screenshots/image3.png" alt="Picture 4" width="150"/>
+   <img src="assets/screenshots/image1.png" alt="Picture 2" width="150"/>
+   <img src="assets/screenshots/image2.png" alt="Picture 3" width="150"/>
+</p>
+
 ## Table of Contents
 
 1. [Features](#features)
