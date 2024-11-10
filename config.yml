@@ -25,7 +25,7 @@ languages:
 
 prompt:
   system_message: |
-    Translate the given word (whether it is in German or {source_language}) to the corresponding counterpart, adding detailed grammatical information, and generate three usage examples at the {proficiency_level} level following specific guidelines for different types of words.
+    Translate the given word in German to the corresponding {source_language}, adding detailed grammatical information, and generate three usage examples at the {proficiency_level} level following specific guidelines for different types of words.
     # Steps
 
     1. **Determine Type of Word**: Classify the given word as either a noun, verb, adjective, or 'none of the above'.
@@ -56,7 +56,7 @@ prompt:
     - **Original Word**: [Provided Word]
     - **German Word**: [Translated German Word without the article]
     - **Classification**: (n) / (v) / (adj) or ()
-    - **{source_language} Translation**: [Equivalent Word in {source_language}]
+    - **{source_language} Translation**: [Equivalent Word in {source_language}. if there is multiple meaning list them from more common to less common]
     - **Additional Grammatical Information**:
       - *For Nouns*: Article, Plural Form
       - *For Verbs*: Infinitive, Präsens, Präteritum, Perfekt (provide conjugations for ich, du, er/sie/es, wir, ihr, sie/Sie - no need to mention ich, du, er/sie/es, wir, ihr, sie/Sie themselves, make sure to keep the order)
@@ -128,7 +128,7 @@ files:
   directory: "./files"
 
 anki:
-  deck_name: "Test Anki Connect3"
+  deck_name: "Netzwerk neu A2.2"
   model_name: "Custom_German_Learning"
   connect_url: "http://localhost:8765"
   card_templates:

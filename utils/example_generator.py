@@ -38,7 +38,7 @@ json_schema = config['schema']
 client = OpenAI(api_key=api_key)
 openai.api_key = api_key
 
-def get_translation_and_example(word, source_language, proficiency_level):
+def get_translation_and_example(word, source_language, proficiency_level, lecture, ubung):
     """Generate translation and example sentences for a given word.
     Args:
         word (str): The word to generate translation and examples for.
@@ -77,6 +77,9 @@ def get_translation_and_example(word, source_language, proficiency_level):
     word_profile_arguments = response.choices[0].message.function_call.arguments
     word_profile = json.loads(word_profile_arguments)
     logging.info(word_profile)
+    # Add lecture and ubung to the word profile
+    word_profile['lecture'] = lecture
+    word_profile['ubung'] = ubung
 
     # Save the word_profile as JSON
     file_path = os.path.join(files_dir, f"{word_profile['german_word']}_profile.json")

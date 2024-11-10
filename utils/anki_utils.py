@@ -123,8 +123,8 @@ def generate_media_files(files_dir, word_data):
         "image": image_file,
     }
 
-def add_anki_card(word_data):
-    """Adds a card to Anki with the custom model template, deleting duplicates if necessary.
+def add_or_update_anki_card(word_data):
+    """Adds or updates a card in Anki with the custom model template, deleting duplicates if necessary.
 
     Args:
         word_data (dict): The data for the word, including German word, classification, examples, etc.
@@ -132,11 +132,8 @@ def add_anki_card(word_data):
     Returns:
         None
     """
-    # Find and delete existing cards with the same German word
+    # Find existing cards with the same German word
     existing_cards = find_existing_card(word_data["german_word"])
-    if existing_cards:
-        for card_id in existing_cards:
-            delete_card(card_id)
 
     # Generate media files for the word profile
     media_files = generate_media_files(files_dir, word_data)
@@ -165,26 +162,43 @@ def add_anki_card(word_data):
         "Picture": f"<img src='{media_files['image']}'>" if media_files["image"] else "",
     }
 
-    # Add the card to Anki
-    payload = {
-        "action": "addNote",
-        "version": 6,
-        "params": {
-            "note": {
-                "deckName": deck_name,
-                "modelName": model_name,
-                "fields": fields,
-                "tags": ["german-learning", "auto-added"]
+    if existing_cards:
+        # Update existing cards
+        for card_id in existing_cards:
+            payload = {
+                "action": "updateNoteFields",
+                "version": 6,
+                "params": {
+                    "note": {
+                        "id": card_id,
+                        "fields": fields
+                    }
+                }
+            }
+            response = requests.post(anki_connect_url, json=payload)
+            if response.json().get("error"):
+                logging.error(f"Failed to update card {card_id}: {response.json()['error']}")
+            else:
+                logging.info(f"Updated card {card_id}")
+    else:
+        # Add a new card
+        payload = {
+            "action": "addNote",
+            "version": 6,
+            "params": {
+                "note": {
+                    "deckName": deck_name,
+                    "modelName": model_name,
+                    "fields": fields,
+                    "tags": ["german-learning", "auto-added"]
+                }
             }
         }
-    }
-
-    response = requests.post(anki_connect_url, json=payload)
-    result = response.json()
-    if result.get("error") is None:
-        logging.info(f"Card for '{word_data['german_word']}' added successfully!")
-    else:
-        logging.error(f"Failed to add card: {result['error']}")
+        response = requests.post(anki_connect_url, json=payload)
+        if response.json().get("error"):
+            logging.error(f"Failed to add card: {response.json()['error']}")
+        else:
+            logging.info(f"Added new card")
 
 def find_existing_card(german_word):
     """Finds existing cards in Anki with the same German word.
