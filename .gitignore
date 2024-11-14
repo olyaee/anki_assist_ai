@@ -20,3 +20,6 @@ poetry.lock
 
 # Streamlit files
 .streamlit/
+final_prompt.txt
+.gitignore
+.env

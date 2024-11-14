@@ -70,7 +70,12 @@ Generate Anki flashcards from any source language to German using AnkiConnect an
      OPENAI_API_KEY=your_openai_api_key
      ```
 
-5. **Configure AnkiConnect**:
+6. **Prepare Anki**:
+
+   - Create a new deck in Anki where you want the cards to be added
+   - Make note of the exact deck name as you'll need to specify it in `config.yml`
+
+7. **Configure AnkiConnect**:
 
    - Install [AnkiConnect](https://foosoft.net/projects/anki-connect/) by following the instructions provided on the website. Here is a summary:
 

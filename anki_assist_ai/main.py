@@ -76,11 +76,15 @@ if __name__ == "__main__":
     create_anki_model()
 
     # Print the sorted list (optional)
-    for word_profile in json_data_list[2:20]:
-        print(word_profile.get('german_word'), word_profile.get('lecture'), word_profile.get('ubung'))
-        generate_image_from_profile(word_profile)
-        generate_tts_from_profile(word_profile)
-        add_or_update_anki_card(word_profile)
+    for word_profile in json_data_list[261:]:
+        try:
+            print(f"{json_data_list.index(word_profile)}:", word_profile.get('german_word'), word_profile.get('lecture'), word_profile.get('ubung'))
+            generate_image_from_profile(word_profile)
+            generate_tts_from_profile(word_profile)
+            # add_or_update_anki_card(word_profile)
+        except Exception as e:
+            print(f"Error processing {json_data_list.index(word_profile)}: {word_profile.get('german_word')}: {str(e)}")
+            continue
 
     # Add the word profile to Anki as a new card
     # add_anki_card(word_profile)
