@@ -32,7 +32,8 @@ def create_anki_model():
             "inOrderFields": [
                 "Wort_DE", "Wortarten", "Wort_SL", "Artikel", "Plural", "Praesens", "Praeteritum", "Perfekt",
                 "Satz1_DE", "Satz1_SL", "Satz2_DE", "Satz2_SL", "Satz3_DE", "Satz3_SL",
-                "Audio_Wort", "Audio_S1", "Audio_S2", "Audio_S3", "Picture"
+                "Audio_Wort", "Audio_S1", "Audio_S2", "Audio_S3", "Bild", "Reflexiv", "Praeposition",
+                "Unregelmaeßig_Verb", "Unregelmaeßig_Adjective", "Komparativ", "Superlativ", "Benutzerkommentare"
             ],
             "cardTemplates": card_templates,
             "css": """
@@ -137,7 +138,7 @@ def add_or_update_anki_card(word_data):
 
     # Generate media files for the word profile
     media_files = generate_media_files(files_dir, word_data)
-
+    
     # Prepare card fields
     examples = word_data.get("examples", [])
     fields = {
@@ -146,9 +147,27 @@ def add_or_update_anki_card(word_data):
         "Wort_SL": word_data["source_language_translation"],
         "Artikel": word_data.get("additional_grammatical_info", {}).get("noun", {}).get("article", "") if word_data["classification"] == "(n)" else "",
         "Plural": word_data.get("additional_grammatical_info", {}).get("noun", {}).get("plural_form", "") if word_data["classification"] == "(n)" else "",
-        "Praesens": ", ".join(word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praesens", [])) if word_data["classification"] == "(v)" else "",
-        "Praeteritum": ", ".join(word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praeteritum", [])) if word_data["classification"] == "(v)" else "",
-        "Perfekt": ", ".join(word_data.get("additional_grammatical_info", {}).get("verb", {}).get("perfekt", [])) if word_data["classification"] == "(v)" else "",
+        "Praesens": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praesens", "") if word_data["classification"] == "(v)" else "",
+        "Praeteritum": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praeteritum", "") if word_data["classification"] == "(v)" else "",
+        "Perfekt": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("perfekt", "") if word_data["classification"] == "(v)" else "",
+        "Reflexiv": "(sich)" if word_data.get("additional_grammatical_info", {}).get("verb", {}).get("reflexive", False) else "",
+        "Praeposition": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praeposition", "") if word_data["classification"] == "(v)" else "",
+        "Unregelmaeßig_Verb": "Unregelmäßig" if (
+            word_data["classification"] == "(v)" and 
+            word_data.get("additional_grammatical_info", {}).get("verb", {}).get("irregular", False)
+        ) else "",
+        "Unregelmaeßig_Adjective": "Unregelmäßig" if (
+            word_data["classification"] == "(adj)" and 
+            word_data.get("additional_grammatical_info", {}).get("adjective", {}).get("irregular", False)
+        ) else "",
+        "Komparativ": word_data.get("additional_grammatical_info", {}).get("adjective", {}).get("comparative", "") if (
+            word_data["classification"] == "(adj)" and 
+            word_data.get("additional_grammatical_info", {}).get("adjective", {}).get("irregular", False)
+        ) else "",
+        "Superlativ": word_data.get("additional_grammatical_info", {}).get("adjective", {}).get("superlative", "") if (
+            word_data["classification"] == "(adj)" and 
+            word_data.get("additional_grammatical_info", {}).get("adjective", {}).get("irregular", False)
+        ) else "",
         "Satz1_DE": examples[0]["german_example"] if len(examples) > 0 else "",
         "Satz1_SL": examples[0]["source_example_translation"] if len(examples) > 0 else "",
         "Satz2_DE": examples[1]["german_example"] if len(examples) > 1 else "",
@@ -159,8 +178,10 @@ def add_or_update_anki_card(word_data):
         "Audio_S1": f"[sound:{media_files['audio_examples'][0]}]" if len(media_files["audio_examples"]) > 0 else "",
         "Audio_S2": f"[sound:{media_files['audio_examples'][1]}]" if len(media_files["audio_examples"]) > 1 else "",
         "Audio_S3": f"[sound:{media_files['audio_examples'][2]}]" if len(media_files["audio_examples"]) > 2 else "",
-        "Picture": f"<img src='{media_files['image']}'>" if media_files["image"] else "",
+        "Bild": f"<img src='{media_files['image']}'>" if media_files["image"] else "",
+        "Benutzerkommentare": ""
     }
+
 
     if existing_cards:
         # Update existing cards
@@ -182,6 +203,7 @@ def add_or_update_anki_card(word_data):
                 logging.info(f"Updated card {card_id}")
     else:
         # Add a new card
+        logging.info("Added new card")
         payload = {
             "action": "addNote",
             "version": 6,
@@ -198,7 +220,7 @@ def add_or_update_anki_card(word_data):
         if response.json().get("error"):
             logging.error(f"Failed to add card: {response.json()['error']}")
         else:
-            logging.info(f"Added new card")
+            logging.info("Added new card")
 
 def find_existing_card(german_word):
     """Finds existing cards in Anki with the same German word.

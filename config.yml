@@ -46,7 +46,11 @@ prompt:
                 1. entschließen --> er entschließt, entschloss, hat entschlossen
                 2. verraten --> er verrät, verriet, hat verraten
                 3. entsprechen --> er entspricht, entsprach, hat entsprochen
-            - if it is a reflexive verb, indicate that the verb is reflexive with '(sich )'.
+            - if it is a reflexive verb. Here are some examples:
+                1. kümmern --> kümmert sich --> True
+                2. gehen --> geht --> False
+                3. streiten --> streiten sich --> True
+                4. ereignen --> ereignen sich --> True
             - if the verb with präposition, indicate the präposition in paranthesis.
                 1. schützen --> (vor + d.)
                 2. verzichten --> (auf + a.)
@@ -62,13 +66,8 @@ prompt:
                 2. gut --> besser - am besten
                 3. klein --> kleiner - am kleinsten
                 4. hoch --> höher - am höchsten
-        - **Conjunction**:
-            - Indicate that the word is a conjunction with '(conj)'.
-            - Mention if it is Subjunktion or Konjunktionaladverb and Whether they send the verb to the end.
-                1. obwohl --> Subjunktion → Verb am Ende
-                2. deswegen --> Konjunktionaladverb → Verb 2. Position
-        - **Adverb**, **Pronoun**, **Preposition**:
-            - Indicate that the word is an adverb with '(adv)', pronoun with '(pron)', preposition with '(prep)'.
+        - **Adverb**, **Pronoun**, **Preposition**, **Conjunction**:
+            - Indicate that the word is an adverb with '(adv)', pronoun with '(pron)', preposition with '(prep)', conjunction with '(conj)'.
         - **None of the above**:
             - Indicate that the word is none of them with '()'.
 
@@ -120,13 +119,6 @@ schema:
             irregular: { type: boolean }
             comparative: { type: string }
             superlative: { type: string }
-        conjunction:
-          type: object
-          properties:
-            type: 
-              type: string
-              enum: ["Subjunktion", "Konjunktionaladverb"]
-            verb_position: { type: string }
     examples:
       type: array
       minItems: 3
@@ -143,7 +135,7 @@ files:
   directory: "./files"
 
 anki:
-  deck_name: "Netzwerk neu B1.1 - English"
+  deck_name: "Netzwerk neu B1.1"
   model_name: "Custom_German_Learning_English_B1.1"
   connect_url: "http://localhost:8765"
   card_templates:
@@ -151,13 +143,17 @@ anki:
       Front: "{{Wort_DE}}{{Wortarten}}{{Audio_Wort}}"
       Back: |
         {{#Artikel}}{{Artikel}}{{/Artikel}}
+        {{#Reflexiv}}{{Reflexiv}}{{/Reflexiv}}
         {{Wort_DE}}{{Wortarten}}
         {{#Plural}}{{Plural}}{{/Plural}}
-        <div>{{Picture}}</div>
+        {{#Praeposition}}{{Praeposition}}{{/Praeposition}}
+        <div>{{Bild}}</div>
         <div style='font-family: Arial; font-size: 16px;'>
-        {{#Praesens}}<br>Präsens: {{Praesens}}{{/Praesens}}
-        {{#Praeteritum}}<br>Präteritum: {{Praeteritum}}{{/Praeteritum}}
-        {{#Perfekt}}<br>Perfekt: {{Perfekt}}{{/Perfekt}}
+        {{#Unregelmaeßig_Verb}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Verb}}
+        {{#Unregelmaeßig_Adjective}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Adjective}}
+        {{#Praesens}}{{Praesens}}, {{/Praesens}}{{#Praeteritum}}{{Praeteritum}}, {{/Praeteritum}}{{#Perfekt}}{{Perfekt}}{{/Perfekt}}
+        {{#Komparativ}}<br>Komparativ: {{Komparativ}}{{/Komparativ}}
+        {{#Superlativ}}<br>Superlativ: {{Superlativ}}{{/Superlativ}}
         </div>
         <hr id=answer>
         {{Wort_SL}}
@@ -179,30 +175,33 @@ anki:
     - Name: "Card 2 SL->DE"
       Front: "{{Wort_SL}}"
       Back: |
-        {{Wort_SL}}
-        <hr id=answer>
         {{#Artikel}}{{Artikel}}{{/Artikel}}
+        {{#Reflexiv}}{{Reflexiv}}{{/Reflexiv}}
         {{Wort_DE}}{{Wortarten}}
         {{#Plural}}{{Plural}}{{/Plural}}
-        {{Audio_Wort}}
-        <div>{{Picture}}</div>
+        {{#Praeposition}}{{Praeposition}}{{/Praeposition}}
+        <div>{{Bild}}</div>
         <div style='font-family: Arial; font-size: 16px;'>
-        {{#Praesens}}<br>Präsens: {{Praesens}}{{/Praesens}}
-        {{#Praeteritum}}<br>Präteritum: {{Praeteritum}}{{/Praeteritum}}
-        {{#Perfekt}}<br>Perfekt: {{Perfekt}}{{/Perfekt}}
+        {{#Unregelmaeßig_Verb}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Verb}}
+        {{#Unregelmaeßig_Adjective}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Adjective}}
+        {{#Praesens}}{{Praesens}}, {{/Praesens}}{{#Praeteritum}}{{Praeteritum}}, {{/Praeteritum}}{{#Perfekt}}{{Perfekt}}{{/Perfekt}}
+        {{#Komparativ}}<br>Komparativ: {{Komparativ}}{{/Komparativ}}
+        {{#Superlativ}}<br>Superlativ: {{Superlativ}}{{/Superlativ}}
         </div>
+        <hr id=answer>
+        {{Wort_SL}}
         <hr>
         <div style="display:none">[sound:_LongSilence.mp3]</div>
-        {{#Satz1_SL}}
-        <div style='font-family: Arial; font-size: 16px;'>{{Satz1_SL}}</div>
-        <div style='font-family: Arial; font-size: 14px;'>{{Satz1_DE}}{{Audio_S1}}</div><br>
-        {{/Satz1_SL}}
-        {{#Satz2_SL}}
-        <div style='font-family: Arial; font-size: 16px;'>{{Satz2_SL}}</div>
-        <div style='font-family: Arial; font-size: 14px;'>{{Satz2_DE}}{{Audio_S2}}</div><br>
-        {{/Satz2_SL}}
-        {{#Satz3_SL}}
-        <div style='font-family: Arial; font-size: 16px;'>{{Satz3_SL}}</div>
-        <div style='font-family: Arial; font-size: 14px;'>{{Satz3_DE}}{{Audio_S3}}</div><br>
-        {{/Satz3_SL}}
+        {{#Satz1_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz1_DE}}{{Audio_S1}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz1_SL}}</div><br>
+        {{/Satz1_DE}}
+        {{#Satz2_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz2_DE}}{{Audio_S2}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz2_SL}}</div><br>
+        {{/Satz2_DE}}
+        {{#Satz3_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz3_DE}}{{Audio_S3}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz3_SL}}</div><br>
+        {{/Satz3_DE}}
 

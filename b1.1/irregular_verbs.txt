@@ -1,0 +1,204 @@
+ab|fahren, er fährt ab, fuhr ab, ist abgefahren
+ab|fliegen, er fliegt ab, flog ab, ist abgeflogen
+ab|geben, er gibt ab, gab ab, hat abgegeben
+ab|heben, er hebt ab, hob ab, hat abgehoben
+ab|schließen, er schließt ab, schloss ab, hat abgeschlossen
+ab|schreiben, er schreibt ab, schrieb ab, hat abgeschrieben
+an|bieten, er bietet an, bot an, hat angeboten
+an|fangen, er fängt an, fing an, hat angefangen
+an|haben, er hat an, hatte an, hat angehabt
+an|kommen, er kommt an, kam an, ist angekommen
+an|nehmen, er nimmt an, nahm an, hat angenommen
+an|schließen, er schließt an, schloss an, hat angeschlossen
+an|sehen, er sieht an, sah an, hat angesehen
+an|sprechen, er spricht an, sprach an, hat angesprochen
+an|ziehen, er zieht an, zog an, hat angezogen
+auf|fallen, er fällt auf, fiel auf, ist aufgefallen
+auf|geben, er gibt auf, gab auf, hat aufgegeben
+auf|halten, er hält auf, hielt auf, hat aufgehalten
+auf|heben, er hebt auf, hob auf, hat aufgehoben
+auf|laden, er lädt auf, lud auf, hat aufgeladen
+auf|nehmen, er nimmt auf, nahm auf, hat aufgenommen
+auf|stehen, er steht auf, stand auf, ist aufgestanden
+aus|fallen, er fällt aus, fiel aus, ist ausgefallen
+aus|geben, er gibt aus, gab aus, hat ausgegeben
+aus|gehen, er geht aus, ging aus, ist ausgegangen
+aus|halten, er hält aus, hielt aus, hat ausgehalten
+aus|sehen, er sieht aus, sah aus, hat ausgesehen
+aus|sprechen, er spricht aus, sprach aus, hat ausgesprochen
+aus|steigen, er steigt aus, stieg aus, ist ausgestiegen
+aus|tragen, er trägt aus, trug aus, hat ausgetragen
+aus|ziehen, er zieht aus, zog aus, hat ausgezogen
+befinden, er befindet, befand, hat befunden
+behalten, er behält, behielt, hat behalten
+bekommen, er bekommt, bekam, hat bekommen
+benehmen, er benimmt, benahm, hat benommen
+beraten, er berät, beriet, hat beraten
+beschreiben, er beschreibt, beschrieb, hat beschrieben
+besitzen, er besitzt, besaß, hat besessen
+bestehen, er besteht, bestand, hat bestanden
+bewerben, er bewirbt, bewarb, hat beworben
+beziehen, er bezieht, bezog, hat bezogen
+bieten, er bietet, bot, hat geboten
+bitten, er bittet, bat, hat gebeten
+bleiben, er bleibt, blieb, ist geblieben
+brechen, er bricht, brach, hat/ist gebrochen
+brennen, er brennt, brannte, hat gebrannt
+bringen, er bringt, brachte, hat gebracht
+denken, er denkt, dachte, hat gedacht
+durch|streichen, er streicht durch, strich durch, hat durchgestrichen
+ein|fallen, er fällt ein, fiel ein, ist eingefallen
+ein|laden, er lädt ein, lud ein, hat eingeladen
+ein|steigen, er steigt ein, stieg ein, ist eingestiegen
+ein|ziehen, er zieht ein, zog ein, ist eingezogen
+empfangen, er empfängt, empfing, hat empfangen
+empfehlen, er empfiehlt, empfahl, hat empfohlen
+entfallen, er entfällt, entfiel, ist entfallen
+enthalten, er enthält, enthielt, hat enthalten
+entlassen, er entlässt, entließ, hat entlassen
+entscheiden, er entscheidet, entschied, hat entschieden
+entschließen, er entschließt, entschloss, hat entschlossen
+entsprechen, er entspricht, entsprach, hat entsprochen
+entstehen, er entsteht, entstand, ist entstanden
+erfahren, er erfährt, erfuhr, hat erfahren
+ergreifen, er ergreift, ergriff, hat ergriffen
+erhalten, er erhält, erhielt, hat erhalten
+erkennen, er erkennt, erkannte, hat erkannt
+ernst nehmen, er nimmt ernst, nahm ernst, hat ernst genommen
+erschließen, er erschließt, erschloss, hat erschlossen
+essen, er isst, aß, hat gegessen
+fahren, er fährt, fuhr, ist gefahren
+fallen, er fällt, fiel, ist gefallen
+fern|sehen, er sieht fern, sah fern, hat ferngesehen
+finden, er findet, fand, hat gefunden
+fliegen, er fliegt, flog, ist geflogen
+frei|nehmen, er nimmt frei, nahm frei, hat freigenommen
+geben, er gibt, gab, hat gegeben
+gefallen, er gefällt, gefiel, hat gefallen
+gehen, es geht, ging, ist gegangen
+gelingen, es gelingt, gelang, ist gelungen
+gelten, er gilt, galt, hat gegolten
+genießen, er genießt, genoss, hat genossen
+geschehen, es geschieht, geschah, ist geschehen
+gewinnen, er gewinnt, gewann, hat gewonnen
+gießen, er gießt, goss, hat gegossen
+halten, er hält, hielt, hat gehalten
+hängen, er hängt, hing, hat gehangen
+heim|fahren, er fährt heim, fuhr heim, ist heimgefahren
+heißen, er heißt, hieß, hat geheißen
+helfen, er hilft, half, hat geholfen
+herunter|fallen, er fällt herunter, fiel herunter, ist heruntergefallen
+herunter|laden, er lädt herunter, lud herunter, hat heruntergeladen
+hin|sehen, er sieht hin, sah hin, hat hingesehen
+hinterlassen, er hinterlässt, hinterließ, hat hinterlassen
+hoch|laden, er lädt hoch, lud hoch, hat hochgeladen
+kaputt|gehen, er geht kaputt, ging kaputt, ist kaputtgegangen
+kennen, er kennt, kannte, hat gekannt
+klingen, er klingt, klang, hat geklungen
+kommen, er kommt, kam, ist gekommen
+laden, er lädt, lud, hat geladen
+lassen, er lässt, ließ, hat gelassen
+laufen, er läuft, lief, ist gelaufen
+leid|tun, er tut leid, tat leid, hat leidgetan
+leihen, er leiht, lieh, hat geliehen
+lesen, er liest, las, hat gelesen
+liegen, er liegt, lag, hat/ist gelegen
+messen, er misst, maß, hat gemessen
+mit|bringen, er bringt mit, brachte mit, hat mitgebracht
+mit|kommen, er kommt mit, kam mit, ist mitgekommen
+mit|nehmen, er nimmt mit, nahm mit, hat mitgenommen
+mit|singen, er singt mit, sang mit, hat mitgesungen
+nach|denken, er denkt nach, dachte nach, hat nachgedacht
+nach|sehen, er sieht nach, sah nach, hat nachgesehen
+nach|sprechen, er spricht nach, sprach nach, hat nachgesprochen
+nehmen, er nimmt, nahm, hat genommen
+nennen, er nennt, nannte, hat genannt
+raten, er rät, riet, hat geraten
+reiten, er reitet, ritt, ist geritten
+riechen, er riecht, roch, hat gerochen
+rufen, er ruft, rief, hat gerufen
+runter|laden, er lädt runter, lud runter, hat runtergeladen
+scheinen, er scheint, schien, hat geschienen
+schief|gehen, es geht schief, ging schief, ist schiefgegangen
+schießen, er schießt, schoss, hat geschossen
+schlafen, er schläft, schlief, hat geschlafen
+schließen, er schließt, schloss, hat geschlossen
+schneiden, er schneidet, schnitt, hat geschnitten
+schreiben, er schreibt, schrieb, hat geschrieben
+schwimmen, er schwimmt, schwamm, ist geschwommen
+sehen, er sieht, sah, hat gesehen
+singen, er singt, sang, hat gesungen
+sitzen, er sitzt, saß, hat/ist gesessen
+sprechen, er spricht, sprach, hat gesprochen
+statt|finden, er findet statt, fand statt, hat stattgefunden
+stehen, er steht, stand, hat/ist gestanden
+sterben, er stirbt, starb, ist gestorben
+stinken, er stinkt, stank, hat gestunken
+streichen, er streicht, strich, hat gestrichen
+streiten, er streitet, stritt, hat gestritten
+teil|nehmen, er nimmt teil, nahm teil, hat teilgenommen
+tragen, er trägt, trug, hat getragen
+treffen, er trifft, traf, hat getroffen
+trinken, er trinkt, trank, hat getrunken
+tun, er tut, tat, hat getan
+übernehmen, er übernimmt, übernahm, hat übernommen
+überweisen, er überweist, überwies, hat überwiesen
+um|sehen, er sieht um, sah um, hat umgesehen
+um|steigen, er steigt um, stieg um, ist umgestiegen
+um|ziehen, er zieht um, zog um, ist umgezogen
+unterhalten, er unterhält, unterhielt, hat unterhalten
+unternehmen, er unternimmt, unternahm, hat unternommen
+unterscheiden, er unterscheidet, unterschied, hat unterschieden
+unterschreiben, er unterschreibt, unterschrieb, hat unterschrieben
+unterstreichen, er unterstreicht, unterstrich, hat unterstrichen
+verbieten, er verbietet, verbat, hat verboten
+verbinden, er verbindet, verband, hat verbunden
+verbringen, er verbringt, verbrachte, hat verbracht
+vergehen, er vergeht, verging, ist vergangen
+vergessen, er vergisst, vergaß, hat vergessen
+vergleichen, er vergleicht, verglich, hat verglichen
+verhalten, er verhält, verhielt, hat verhalten
+verleihen, er verleiht, verlieh, hat verliehen
+verlieren, er verliert, verlor, hat verloren
+vermeiden, er vermeidet, vermied, hat vermieden
+verraten, er verrät, verriet, hat verraten
+verschieben, er verschiebt, verschob, hat verschoben
+verschwinden, er verschwindet, verschwand, ist verschwunden
+verstehen, er versteht, verstand, hat verstanden
+verzeihen, er verzeiht, verzieh, hat verziehen
+vorbei|kommen, er kommt vorbei, kam vorbei, ist vorbeigekommen
+vor|haben, er hat vor, hatte vor, hat vorgehabt
+vor|kommen, er kommt vor, kam vor, ist vorkommen
+vor|nehmen, er nimmt vor, nahm vor, hat vorgenommen
+vor|schlagen, er schlägt vor, schlug vor, hat vorgeschlagen
+vor|tragen, er trägt vor, trug vor, hat vorgetragen
+vor|ziehen, er zieht vor, zog vor, hat vorgezogen
+wachsen, er wächst, wuchs, ist gewachsen
+waschen, er wäscht, wusch, hat gewaschen
+weg|fahren, er fährt weg, fuhr weg, ist weggefahren
+weg|laufen, er läuft weg, lief weg, ist weggelaufen
+weg|werfen, er wirft weg, warf weg, hat weggeworfen
+weg|ziehen, er zieht weg, zog weg, ist weggezogen
+weh|tun, er tut weh, tat weh, hat wehgetan
+weiter|geben, er gibt weiter, gab weiter, hat weitergegeben
+weiter|helfen, er hilft weiter, half weiter, hat weitergeholfen
+werfen, er wirft, warf, hat geworfen
+widersprechen, er widerspricht, widersprach, hat widersprochen
+wieder|geben, er gibt wieder, gab wieder, hat wiedergegeben
+wiegen, er wiegt, wog, hat gewogen
+wissen, er weiß, wusste, hat gewusst
+ziehen, er zieht, zog, hat/ist gezogen
+zu|nehmen, er nimmt zu, nahm zu, hat zugenommen
+zurück|bekommen, er bekommt zurück, bekam zurück, hat zurückbekommen
+zurück|bringen, er bringt zurück, brachte zurück, hat zurückgebracht
+zurück|fahren, er fährt zurück, fuhr zurück, ist zurückgefahren
+zurück|geben, er gibt zurück, gab zurück, hat zurückgegeben
+zurück|gehen, er geht zurück, ging zurück, ist zurückgegangen
+zurück|kommen, er kommt zurück, kam zurück, ist zurückgekommen
+zurück|laufen, er läuft zurück, lief zurück, ist zurückgelaufen
+zurück|rufen, er ruft zurück, rief zurück, hat zurückgerufen
+zusammen|sitzen, er sitzt zusammen, saß zusammen, hat zusammengesessen
+werden, er wird, wurde, ist geworden
+
+
+

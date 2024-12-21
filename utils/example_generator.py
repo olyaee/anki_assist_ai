@@ -9,6 +9,7 @@ import yaml
 from dotenv import load_dotenv
 import logging
 import sys
+import pandas as pd
 
 # Load environment variables
 load_dotenv()
@@ -38,19 +39,42 @@ json_schema = config['schema']
 client = OpenAI(api_key=api_key)
 openai.api_key = api_key
 
-def get_translation_and_example(word, source_language, proficiency_level, lecture, ubung):
-    """Generate translation and example sentences for a given word.
-    Args:
-        word (str): The word to generate translation and examples for.
-        source_language (str): The source language of the word.
-        proficiency_level (str): The proficiency level of the user.
-    Returns:
-        dict: A dictionary containing the word profile with translation and example sentences.
-    Raises:
-        Exception: If there is an error in generating the word profile.
-    """
+def read_vocabulary(vocabulary_file):
+    """Read the vocabulary from word_exercises.csv."""
+    try:
+        df = pd.read_csv(vocabulary_file, delimiter=';')
+        return '\n'.join(df['word'].tolist())
+    except Exception as e:
+        logging.error(f"Error reading vocabulary: {e}")
+        return ""
+
+def read_grammar(grammar_file):
+    """Read the grammar content from grammar.md."""
+    try:
+        with open(grammar_file, 'r') as file:
+            return file.read()
+    except Exception as e:
+        logging.error(f"Error reading grammar: {e}")
+        return ""
+
+def get_translation_and_example(word, source_language, proficiency_level, vocabulary_file, grammar_file, lecture_number, ubung):
     """Generate translation and example sentences for a given word."""
-    system_message = system_message_template.format(source_language=source_language, proficiency_level=proficiency_level)
+    # Read vocabulary and grammar
+    vocabulary = read_vocabulary(vocabulary_file)
+    grammar = read_grammar(grammar_file)
+    
+    # Construct the complete prompt with system message at the end
+    complete_prompt = f"<Vocabulary>\n{vocabulary}\n</Vocabulary>\n\n<Grammar>\n{grammar}\n</Grammar>\n\n{system_message_template}"
+    
+    # Format the prompt with the provided parameters
+    system_message = complete_prompt.format(source_language=source_language, proficiency_level=proficiency_level, lecture_number=lecture_number)
+    
+    # # Print the complete prompt for verification
+    # print("Complete Prompt:")
+    # print("-" * 80)
+    # print(system_message)
+    # print("-" * 80)
+
     response = client.chat.completions.create(
         model=text_model,
         messages=[
@@ -78,7 +102,7 @@ def get_translation_and_example(word, source_language, proficiency_level, lectur
     word_profile = json.loads(word_profile_arguments)
     logging.info(word_profile)
     # Add lecture and ubung to the word profile
-    word_profile['lecture'] = lecture
+    word_profile['lecture'] = lecture_number
     word_profile['ubung'] = ubung
 
     # Save the word_profile as JSON
@@ -165,7 +189,7 @@ def generate_tts_from_profile(word_profile):
         tts_response.stream_to_file(file_path)
         logging.info(f"Audio saved as {file_path}")
     # Use in generate_tts_from_profile
-    save_tts_audio(main_word, os.path.join(files_dir, f"{main_word}_word.mp3"), voice)
+    # save_tts_audio(main_word, os.path.join(files_dir, f"{main_word}_word.mp3"), voice)
 
     # Generate TTS for each example sentence
     for index, example in enumerate(word_profile['examples']):
