@@ -35,6 +35,21 @@ def create_anki_model():
                 "Audio_Wort", "Audio_S1", "Audio_S2", "Audio_S3", "Bild", "Reflexiv", "Praeposition",
                 "Unregelmaeßig_Verb", "Unregelmaeßig_Adjective", "Komparativ", "Superlativ", "Benutzerkommentare"
             ],
+            "inOrderFields": [
+                # Word details
+                "Wort_DE", "Wort_SL", "Wortarten", "Artikel", "Plural", 
+                # Verb details
+                "Praesens", "Praeteritum", "Perfekt", "Reflexiv", "Praeposition", "Unregelmaeßig_Verb",
+                # Adjective details
+                "Komparativ", "Superlativ", "Unregelmaeßig_Adjective",
+                # Example sentences
+                "Satz1_DE", "Satz1_SL", "Satz2_DE", "Satz2_SL", "Satz3_DE", "Satz3_SL",
+                # Media files
+                "Audio_Wort", "Audio_S1", "Audio_S2", "Audio_S3", "Bild",
+                # Comments
+                "Benutzerkommentare"
+            ],
+            
             "cardTemplates": card_templates,
             "css": """
                 .card {

@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 import logging
 import sys
 import pandas as pd
+from .cost_calculator import calculate_cost
 
 # Load environment variables
 load_dotenv()
@@ -65,16 +66,10 @@ def get_translation_and_example(word, source_language, proficiency_level, vocabu
     
     # Construct the complete prompt with system message at the end
     complete_prompt = f"<Vocabulary>\n{vocabulary}\n</Vocabulary>\n\n<Grammar>\n{grammar}\n</Grammar>\n\n{system_message_template}"
-    
+
     # Format the prompt with the provided parameters
     system_message = complete_prompt.format(source_language=source_language, proficiency_level=proficiency_level, lecture_number=lecture_number)
     
-    # # Print the complete prompt for verification
-    # print("Complete Prompt:")
-    # print("-" * 80)
-    # print(system_message)
-    # print("-" * 80)
-
     response = client.chat.completions.create(
         model=text_model,
         messages=[
@@ -115,6 +110,12 @@ def get_translation_and_example(word, source_language, proficiency_level, vocabu
     logging.info(f"Prompt tokens: {response.usage.prompt_tokens}")
     logging.info(f"Completion tokens: {response.usage.completion_tokens}")
     logging.info(f"Total tokens: {response.usage.total_tokens}")
+
+    # Calculate and log cost information
+    input_text = system_message + word
+    output_text = word_profile_arguments
+    cost_info = calculate_cost(input_text, output_text, text_model)
+    logging.info(f"API Call Cost Information: {json.dumps(cost_info, indent=2)}")
 
     return word_profile
 
