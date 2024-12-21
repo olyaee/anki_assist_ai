@@ -24,52 +24,60 @@ languages:
     - C2
 
 prompt:
-  system_message: |
-    Translate the given word in German to the corresponding {source_language}, adding detailed grammatical information, and generate three usage examples at the {proficiency_level} level following specific guidelines for different types of words.
-    # Steps
+  system_message: >
+    <prompt>
+    Create a German word profile for the given word. Create the profile by adding details about the word, its grammatical information, and generate three usage examples.
 
-    1. **Determine Type of Word**: Classify the given word as either a noun, verb, adjective, or 'none of the above'.
-
-    2. **Translate the Word**: Translate the provided word into its accurate equivalent in the other language (German to {source_language} or {source_language} to German).
+    1. Determine the **Type of Word**: Confirm if the given word is a **noun**, **verb**, **adjective**, **adverb**, **pronoun**, **preposition**, **conjunction**, or belongs to **none of the above** categories.
 
     3. **Grammatical Information**:
-        - *If the word is a noun*:
-          - Indicate that the word is a noun with '(n)'.
-          - Provide the appropriate definite article ('der', 'die', 'das' for German).
-          - Include the plural form.
-        - *If the word is a verb*:
-          - Indicate that the word is a verb with '(v)'.
-          - Provide the verb conjugations: Infinitive, Präsens, Präteritum, Perfekt for all forms in German (ich, du, er/sie/es, wir, ihr, sie/Sie).
-        - *If the word is an adjective*:
-          - Indicate that the word is an adjective with '(adj)'.
-        - *If the word is none of the above*:
-          - Indicate that the word is none of them with '()'.
+        - **Noun**:
+            - Indicate that the word is a noun with '(n)'.
+            - Provide the appropriate definite article ('der', 'die', 'das' for German).
+            - Include how the plural form is formed. if the of th word is plural by default, indicate that the word is plural by default with '(pl.)' . if it is singular by default, indicate that the word is singular by default with '(sg.)' for example: 
+                1. hütte --> -n
+                2. ferienclub --> -s
+                3. himmel --> -s
+                4. weihnachtsferien --> pl.
+        - **Verb**:
+            - Indicate that the word is a verb with '(v)'.
+            - Indicate if the verb is regular or irregular.
+            - Provide the verb conjugations: Infinitive, Präsens, Präteritum, Perfekt. Only for er. For example:
+                1. entschließen --> er entschließt, entschloss, hat entschlossen
+                2. verraten --> er verrät, verriet, hat verraten
+                3. entsprechen --> er entspricht, entsprach, hat entsprochen
+            - if it is a reflexive verb, indicate that the verb is reflexive with '(sich )'.
+            - if the verb with präposition, indicate the präposition in paranthesis.
+                1. schützen --> (vor + d.)
+                2. verzichten --> (auf + a.)
+                3. anpassen --> (an + a.)
+        - **Adjective**:
+            - Indicate that the word is an adjective with '(adj)'.
+                1. schwach --> irregular
+                2. gut --> irregular
+                3. klein --> regular
+                4. hoch --> regular
+            - Mention the comparative and superlative forms.
+                1. schwach --> schwächer - am schwächsten
+                2. gut --> besser - am besten
+                3. klein --> kleiner - am kleinsten
+                4. hoch --> höher - am höchsten
+        - **Conjunction**:
+            - Indicate that the word is a conjunction with '(conj)'.
+            - Mention if it is Subjunktion or Konjunktionaladverb and Whether they send the verb to the end.
+                1. obwohl --> Subjunktion → Verb am Ende
+                2. deswegen --> Konjunktionaladverb → Verb 2. Position
+        - **Adverb**, **Pronoun**, **Preposition**:
+            - Indicate that the word is an adverb with '(adv)', pronoun with '(pron)', preposition with '(prep)'.
+        - **None of the above**:
+            - Indicate that the word is none of them with '()'.
 
-    4. **Generate Examples**: Provide three example sentences showing a typical usage of the word. These examples must be at the {proficiency_level} language proficiency level:
-       - **Example in German**: Create an example sentence in German.
-       - **Translation in {source_language}**: Translate the example sentence into {source_language}.
-
-    # Output Format
-
-    The output should be presented as follows:
-
-    - **Original Word**: [Provided Word]
-    - **German Word**: [Translated German Word without the article]
-    - **Classification**: (n) / (v) / (adj) or ()
-    - **{source_language} Translation**: [Equivalent Word in {source_language}. if there is multiple meaning list them from more common to less common]
-    - **Additional Grammatical Information**:
-      - *For Nouns*: Article, Plural Form
-      - *For Verbs*: Infinitive, Präsens, Präteritum, Perfekt (provide conjugations for ich, du, er/sie/es, wir, ihr, sie/Sie - no need to mention ich, du, er/sie/es, wir, ihr, sie/Sie themselves, make sure to keep the order)
-    - **Examples**:
-      - 1. German Example: [Sentence in German]
-        - {source_language} Example Translation: [Translation of the German Example Sentence]
-      - 2. German Example: [Sentence in German]
-        - {source_language} Example Translation: [Translation of the German Example Sentence]
-      - 3. German Example: [Sentence in German]
-        - {source_language} Example Translation: [Translation of the German Example Sentence]
-    - The example sentences should be in {proficiency_level} level to ensure they are appropriate for {proficiency_level} level learners. This will help ensuring the examples maximize their learning experience.
-    - When generating examples, take into account the proficiency level ({proficiency_level}). Ensure word choice and grammatical complexity match the target learner's level.
-    - If the word has multiple meanings or uses, choose the most common interpretation.
+    4. **Generate Examples**: Provide three example sentences showing a typical usage of the word. The exammples must follow the following rules:
+        - At least one of the examples should use the grammer of lecture {lecture_number}. The grammer of the lectures are indicated the section <Grammer> <Grammer/>. We have in total 6 Lectures. 
+        - The examples should be at the {proficiency_level} level.
+        - Try to use words of the {proficiency_level} level that are mentioned in <Vocabulary> <Vocabulary/>.
+        - Each example should be both in German and {source_language}.
+    </prompt>
 
 openai:
   text_model: "gpt-4o-mini"
@@ -84,7 +92,7 @@ schema:
     german_word: { type: string }
     classification: 
       type: string 
-      enum: ["(n)", "(v)", "(adj)", "()"]
+      enum: ["(n)", "(v)", "(adj)", "(adv)", "(pron)", "(prep)", "(conj)", "()"]
     source_language_translation: { type: string }
     additional_grammatical_info:
       type: object
@@ -99,19 +107,26 @@ schema:
         verb:
           type: object
           properties:
+            irregular: { type: boolean }
             infinitive: { type: string }
-            praesens: 
-              type: array 
-              items: { type: string }
-            praeteritum: 
-              type: array 
-              items: { type: string }
-            perfekt: 
-              type: array 
-              items: { type: string }
+            praesens: { type: string }
+            praeteritum: { type: string }
+            perfekt: { type: string }
+            reflexive: { type: boolean }
+            praeposition: { type: string }
         adjective:
           type: object
-          properties: {}
+          properties:
+            irregular: { type: boolean }
+            comparative: { type: string }
+            superlative: { type: string }
+        conjunction:
+          type: object
+          properties:
+            type: 
+              type: string
+              enum: ["Subjunktion", "Konjunktionaladverb"]
+            verb_position: { type: string }
     examples:
       type: array
       minItems: 3
@@ -122,14 +137,14 @@ schema:
           german_example: { type: string }
           source_example_translation: { type: string }
         required: ["german_example", "source_example_translation"]
-  required: ["original_word", "german_word", "classification", "source_language_translation", "examples"]
+  required: ["original_word", "german_word", "classification", "source_language_translation", "examples", "additional_grammatical_info"]
 
 files:
   directory: "./files"
 
 anki:
-  deck_name: "Netzwerk neu A2.2"
-  model_name: "Custom_German_Learning"
+  deck_name: "Netzwerk neu B1.1 - English"
+  model_name: "Custom_German_Learning_English_B1.1"
   connect_url: "http://localhost:8765"
   card_templates:
     - Name: "Card 1 DE->SL"
