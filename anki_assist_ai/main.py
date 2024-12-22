@@ -41,6 +41,7 @@ if __name__ == "__main__":
     proficiency_level = 'B1.1'
     vocabulary_file = 'b1.1/word_exercises.csv'
     grammar_file = 'b1.1/grammer.md'
+    csv_file = 'b1.1/word_exercises_combined_with_the_other_two_files.csv'
     generate_image = False
     generate_tts = False
     add_to_anki = True
@@ -52,5 +53,5 @@ if __name__ == "__main__":
 
 
     # Read the CSV file
-    df = pd.read_csv("/Users/ehsanolyaee/Documents/Code/anki_assist_ai/b1.1/word_exercises.csv", delimiter=';')[:1]
+    df = pd.read_csv(csv_file, delimiter=';')[-5:]
     word_list_profile(vocabulary_file, grammar_file, df, source_language, proficiency_level, generate_image, generate_tts, add_to_anki)

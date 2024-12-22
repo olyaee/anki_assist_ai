@@ -105,7 +105,7 @@ prompt:
             - Indicate that the word is none of them with '()'.
 
     4. **Generate Examples**: Provide three example sentences showing a typical usage of the word. The exammples must follow the following rules:
-        - At least one of the examples should use the grammer of lecture {lecture_number}. The grammer of the lectures are indicated the section <Grammer> <Grammer/>. We have in total 6 Lectures. 
+        - At least one of the examples should use the grammer of lecture {lecture_number}. The grammer of the lectures are indicated the section <Grammer> <Grammer/>. and lection sections are indicated with %%% %%%. We have in total 6 Lectures. 
         - The examples should be at the {proficiency_level} level.
         - Try to use words of the {proficiency_level} level that are mentioned in <Vocabulary> <Vocabulary/>.
         - Each example should be both in German and {source_language}.

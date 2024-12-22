@@ -1,4 +1,6 @@
+%%%
 ### Lektion 1
+%%%
 #### Infinitiv mit "zu"
 
 **Nach bestimmten Verben:**  
@@ -26,7 +28,9 @@
 - Melina hatte schöne Tage in Heringsdorf, **obwohl** das Wetter schlecht **war**.  
 - **Obwohl** die Geschäfte und Restaurants teuer **sind**, kommen viele Touristen nach Rothenburg.  
 
+%%%
 ### Lektion 2
+%%%
 
 #### **lassen + Infinitiv**
 
@@ -81,7 +85,9 @@ Maskuline und neutrale Nomen mit nur einer Silbe haben die Endung **-es**:
 **Hinweis:**  
 Adjektive haben nach Artikelwörtern im Genitiv immer die Endung **-en**.  
 
+%%%
 ### Lektion 3
+%%%
 
 #### Präteritum: Formen
 
@@ -152,7 +158,9 @@ Adjektive haben nach Artikelwörtern im Genitiv immer die Endung **-en**.
     - **innerhalb einer** Stunde  
     - **während eines** Konzerts  
 
+%%%
 ### Lektion 4
+%%%
 
 #### Konjunktiv II
 
@@ -205,7 +213,9 @@ Die Präposition beginnt mit einem Vokal: **dar-** (daran, darauf, darüber …)
   - Er wartet **darauf**, **dass** er eine Antwort bekommt.  
   - Er wartet **darauf**, **eine Antwort zu bekommen**.  
 
+%%%
 ### Lektion 5
+%%%
 
 #### Komparativ und Superlativ vor Nomen
 
@@ -239,7 +249,9 @@ Die Präposition beginnt mit einem Vokal: **dar-** (daran, darauf, darüber …)
 - **damit** oder **um ... zu** wird verwendet, wenn die Subjekte in Haupt- und Nebensatz **gleich** sind.  
 - In Sätzen mit **um ... zu** entfällt das Subjekt. Das Verb steht im Infinitiv.  
 
+%%%
 ### Lektion 6
+%%%
 
 ### Futur I: Zukunft ausdrücken
 
