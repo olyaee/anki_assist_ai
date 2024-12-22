@@ -21,3 +21,4 @@ poetry.lock
 # Streamlit files
 .streamlit/
 .env
+.env

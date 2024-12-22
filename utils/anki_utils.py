@@ -159,14 +159,18 @@ def add_or_update_anki_card(word_data):
     fields = {
         "Wort_DE": word_data["german_word"],
         "Wortarten": word_data["classification"],
-        "Wort_SL": word_data["source_language_translation"],
+        "Wort_SL": ", ".join(word_data["source_language_translation"]),
         "Artikel": word_data.get("additional_grammatical_info", {}).get("noun", {}).get("article", "") if word_data["classification"] == "(n)" else "",
         "Plural": word_data.get("additional_grammatical_info", {}).get("noun", {}).get("plural_form", "") if word_data["classification"] == "(n)" else "",
         "Praesens": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praesens", "") if word_data["classification"] == "(v)" else "",
         "Praeteritum": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praeteritum", "") if word_data["classification"] == "(v)" else "",
         "Perfekt": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("perfekt", "") if word_data["classification"] == "(v)" else "",
         "Reflexiv": "(sich)" if word_data.get("additional_grammatical_info", {}).get("verb", {}).get("reflexive", False) else "",
-        "Praeposition": word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praeposition", "") if word_data["classification"] == "(v)" else "",
+        "Praeposition": (
+            word_data.get("additional_grammatical_info", {}).get("verb", {}).get("praeposition", "") if word_data["classification"] == "(v)" else
+            word_data.get("additional_grammatical_info", {}).get("adjective", {}).get("praeposition", "") if word_data["classification"] == "(adj)" else
+            ""
+        ),
         "Unregelmaeßig_Verb": "Unregelmäßig" if (
             word_data["classification"] == "(v)" and 
             word_data.get("additional_grammatical_info", {}).get("verb", {}).get("irregular", False)

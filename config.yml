@@ -26,19 +26,48 @@ languages:
 prompt:
   system_message: >
     <prompt>
-    Create a German word profile for the given word. Create the profile by adding details about the word, its grammatical information, and generate three usage examples.
+    You will create a dictionary-style **German Word Profile** for the given word, regardless of whether the input is in German or source language. Our source language is **{source_language}**. Follow the steps below:
 
-    1. Determine the **Type of Word**: Confirm if the given word is a **noun**, **verb**, **adjective**, **adverb**, **pronoun**, **preposition**, **conjunction**, or belongs to **none of the above** categories.
+    1. **Detect the Input Language**:
+        - If the word is already in **German**, proceed directly to step 2.
+        - If the word is in **{source_language}**, translate it into **German** and use the German version of the word for steps 3 and 4.
 
+    2. **Translate the Word**:  
+        - Translate the word to the opposite language:
+            - If the word is in **German**, translate it to **{source_language}**.
+            - If the word is in **{source_language}**, translate it to **German**.
+        - If the word has multiple meanings, list them in order from the most commonly used to the least commonly used. for example:
+            - examples below are german-english translations. if the word is in {source_language}, use the {source_language}-german translations.
+                - "Schlüssel → ['Key (for a door)', 'Key (solution or essential idea)']"
+                - "Schloss → ['Lock (on a door)', 'Castle']"
+                - "Bank → ['Bank (financial institution)', 'Bench (to sit on)', 'Bank (of a river)']"
+                - "Buch → ['Book', 'Account book (for accounting)']"
+                - "Strom → ['Electricity', 'Stream (of water)', 'Current (of air or electricity)']"
+                - "Leiter → ['Leader (of a group or organization)', 'Ladder']"
+                - "laufen → ['To run', 'To walk (casually, in some dialects)', 'To be running/working (e.g., Der Motor läuft = The motor is running)']"
+                - "ziehen → ['To pull', 'To move (e.g., umziehen = to move to a new home)', 'To draw (e.g., a card or lottery ticket)']"
+                - "fahren → ['To drive', 'To travel (by vehicle)', 'To go (e.g., mit dem Zug fahren = to go by train)']"
+                - "schlagen → ['To hit', 'To beat (e.g., Schlagzeug spielen = to play the drums)', 'To defeat (e.g., den Gegner schlagen = to defeat the opponent)']"
+                - "arm → ['Poor (not wealthy)', 'Poor (pitiful, as in poor thing)']"
+                - "schwer → ['Heavy', 'Difficult']"
+                - "frei → ['Free (not occupied)', 'Free (no cost)', 'Free (unrestricted)']"
+                - "alt → ['Old (age of a person or object)', 'Former (previous or earlier)']"
+                - "einfach → ['Simple (not complicated)', 'Easy (to do)', 'Plain (basic or unadorned)']"
+                - "Tisch → ['Table']"
+                - "Haus → ['House']"
+                - "Baum → ['Tree']"
+                - "Tag → ['Day']"
+                - 20. Wasser → Water   
     3. **Grammatical Information**:
         - **Noun**:
             - Indicate that the word is a noun with '(n)'.
             - Provide the appropriate definite article ('der', 'die', 'das' for German).
-            - Include how the plural form is formed. if the of th word is plural by default, indicate that the word is plural by default with '(pl.)' . if it is singular by default, indicate that the word is singular by default with '(sg.)' for example: 
+            - Include how the plural form is formed. If the noun exists only in the singular, mark it with '(sg.)'. If the noun exists only in the plural, mark it with '(pl.)'. if it is singular by default, indicate that the word is singular by default with '(sg.)' for example: 
                 1. hütte --> -n
                 2. ferienclub --> -s
                 3. himmel --> -s
                 4. weihnachtsferien --> pl.
+                5. Ökostrom --> sg.
         - **Verb**:
             - Indicate that the word is a verb with '(v)'.
             - Indicate if the verb is regular or irregular.
@@ -46,12 +75,12 @@ prompt:
                 1. entschließen --> er entschließt, entschloss, hat entschlossen
                 2. verraten --> er verrät, verriet, hat verraten
                 3. entsprechen --> er entspricht, entsprach, hat entsprochen
-            - if it is a reflexive verb. Here are some examples:
+            - If it is a reflexive verb. Here are some examples: 
                 1. kümmern --> kümmert sich --> True
                 2. gehen --> geht --> False
                 3. streiten --> streiten sich --> True
                 4. ereignen --> ereignen sich --> True
-            - if the verb with präposition, indicate the präposition in paranthesis.
+            - If the verb with präposition, indicate the präposition in paranthesis.
                 1. schützen --> (vor + d.)
                 2. verzichten --> (auf + a.)
                 3. anpassen --> (an + a.)
@@ -66,6 +95,10 @@ prompt:
                 2. gut --> besser - am besten
                 3. klein --> kleiner - am kleinsten
                 4. hoch --> höher - am höchsten
+            - If the adjective has a präposition, indicate the präposition in paranthesis.
+                1. interessiert --> (an + d.)
+                2. stolz --> (auf + a.)
+                3. zufrieden --> (mit + d.)
         - **Adverb**, **Pronoun**, **Preposition**, **Conjunction**:
             - Indicate that the word is an adverb with '(adv)', pronoun with '(pron)', preposition with '(prep)', conjunction with '(conj)'.
         - **None of the above**:
@@ -92,7 +125,11 @@ schema:
     classification: 
       type: string 
       enum: ["(n)", "(v)", "(adj)", "(adv)", "(pron)", "(prep)", "(conj)", "()"]
-    source_language_translation: { type: string }
+    source_language_translation: 
+      type: array
+      items:
+        type: string
+      description: "List of translations of the German word in the source language"
     additional_grammatical_info:
       type: object
       properties:
@@ -119,6 +156,7 @@ schema:
             irregular: { type: boolean }
             comparative: { type: string }
             superlative: { type: string }
+            praeposition: { type: string }
     examples:
       type: array
       minItems: 3
@@ -152,8 +190,7 @@ anki:
         {{#Unregelmaeßig_Verb}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Verb}}
         {{#Unregelmaeßig_Adjective}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Adjective}}
         {{#Praesens}}{{Praesens}}, {{/Praesens}}{{#Praeteritum}}{{Praeteritum}}, {{/Praeteritum}}{{#Perfekt}}{{Perfekt}}{{/Perfekt}}
-        {{#Komparativ}}<br>Komparativ: {{Komparativ}}{{/Komparativ}}
-        {{#Superlativ}}<br>Superlativ: {{Superlativ}}{{/Superlativ}}
+        {{#Komparativ}}{{Komparativ}}, {{/Komparativ}}{{#Superlativ}}{{Superlativ}}{{/Superlativ}}
         </div>
         <hr id=answer>
         {{Wort_SL}}
@@ -185,8 +222,7 @@ anki:
         {{#Unregelmaeßig_Verb}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Verb}}
         {{#Unregelmaeßig_Adjective}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Adjective}}
         {{#Praesens}}{{Praesens}}, {{/Praesens}}{{#Praeteritum}}{{Praeteritum}}, {{/Praeteritum}}{{#Perfekt}}{{Perfekt}}{{/Perfekt}}
-        {{#Komparativ}}<br>Komparativ: {{Komparativ}}{{/Komparativ}}
-        {{#Superlativ}}<br>Superlativ: {{Superlativ}}{{/Superlativ}}
+        {{#Komparativ}}{{Komparativ}}, {{/Komparativ}}{{#Superlativ}}{{Superlativ}}{{/Superlativ}}
         </div>
         <hr id=answer>
         {{Wort_SL}}
