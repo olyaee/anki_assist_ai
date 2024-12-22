@@ -105,11 +105,23 @@ prompt:
             - Indicate that the word is none of them with '()'.
 
     4. **Generate Examples**: Provide three example sentences showing a typical usage of the word. The exammples must follow the following rules:
-        - At least one of the examples should use the grammer of lecture {lecture_number}. The grammer of the lectures are indicated the section <Grammer> <Grammer/>. and lection sections are indicated with %%% %%%. We have in total 6 Lectures. 
+        - Use the grammer of the Lecture {lecture_number}. The grammer of the lectures are indicated the section <Grammer> <Grammer/>. and Lecture sections are indicated with %%% %%%. We have in total 6 Lectures. 
         - The examples should be at the {proficiency_level} level.
         - Try to use words of the {proficiency_level} level that are mentioned in <Vocabulary> <Vocabulary/>.
         - Each example should be both in German and {source_language}.
     </prompt>
+
+  image_prompt: >
+    Create an image for the given word: {german_word}. Focus on a purely visual depiction that helps language learners grasp the essence of the word at a glance.
+
+    # Important Instructions
+    1. **No Text Elements**: Do not include any text, letters, numbers, or written characters in the image (no signs, labels, titles, or watermarks).
+    2. **Focus on the Core Meaning**: Use symbols, objects, or scenarios that directly convey the word's primary meaning or emotional context.
+    3. **Evocative Visuals**: Employ colors, expressions, and settings that evoke the feeling or concept behind the word, ensuring a memorable and intuitive connection.
+    4. **Cultural/Contextual Nuances**: If relevant, incorporate culturally appropriate elements that reinforce the word's usage and context without relying on text.
+
+    # Goal
+    Produce a single, clear, and memorable scene that linguistically or conceptually suggests {german_word}—purely through imagery—so that a learner can instantly recall the word and its meaning. Keep the design straightforward and focused on recognizable elements that spark immediate understanding. No text or typographic details should be visible anywhere in the scene.
 
 openai:
   text_model: "gpt-4o-mini"
@@ -130,6 +142,7 @@ schema:
       items:
         type: string
       description: "List of translations of the German word in the source language"
+      minItems: 1
     additional_grammatical_info:
       type: object
       properties:
@@ -167,6 +180,8 @@ schema:
           german_example: { type: string }
           source_example_translation: { type: string }
         required: ["german_example", "source_example_translation"]
+      minContains: 3
+      maxContains: 3
   required: ["original_word", "german_word", "classification", "source_language_translation", "examples", "additional_grammatical_info"]
 
 files:

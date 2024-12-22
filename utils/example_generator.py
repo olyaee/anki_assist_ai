@@ -38,6 +38,7 @@ image_model = config['openai']['image_model']
 image_size = config['openai']['image_size']
 tts_model = config['openai']['tts_model']
 system_message_template = config['prompt']['system_message']
+image_prompt_template = config['prompt']['image_prompt']
 json_schema = config['schema']
 
 # Initialize OpenAI API key
@@ -134,8 +135,8 @@ def generate_image_from_profile(word_profile):
     Returns:
         None
     """
-    """Generate an image based on the word profile."""
-    image_prompt = f"Create an image for the word {word_profile}."
+    # Format the image prompt with the word profile data
+    image_prompt = image_prompt_template.format(german_word=word_profile['german_word'])
 
     image_response = client.images.generate(
         model=image_model,

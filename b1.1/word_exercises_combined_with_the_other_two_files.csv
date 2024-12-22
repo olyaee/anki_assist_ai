@@ -20,6 +20,7 @@ reif;1;2
 sand, der (sg.);1;2
 traube, die, -n;1;2
 urlaubsgruß, der, -e;1;2
+sich vor|stellen;1;3a
 derselbe, dasselbe, dieselbe;1;3b
 entfernung, die, -en;1;3b
 ferienhaus, das, -er;1;3b
@@ -38,11 +39,10 @@ urlaubsplanung, die, -en;1;4a
 wieso;1;4a
 zu (ich habe keine lust, lange nach einer ferienwohnung zu suchen.);1;4a
 entspannend;1;5a
+denken;1;5a
 erfahren, er erfährt, erfuhr, hat erfahren;1;5c
 schifffahrt, die, -en;1;6a
 wellnesshotel, das, -s;1;6a
-sich registrieren;1;6a
-sich unterhalten;1;6a
 ca.;1;7
 enthalten sein (in + d.) (in der küche ist viel zu viel essen enthalten.);1;7
 fahrtzeit, die, -en;1;7
@@ -57,6 +57,7 @@ skilift, der, -e;1;7
 vollpension, die (sg.);1;7
 wellness-bereich, der, -e;1;7
 winterurlaub, der, -e;1;7
+sprechen;1;7a
 badewanne, die, -n;1;8b
 boot, das, -e;1;8b
 da (da rothenburg so bekannt ist, kommen viele touristen in die stadt.);1;8b
@@ -86,6 +87,11 @@ tragen, er trägt, trug, hat getragen (gepäck zum auto tragen);1;9a
 verzweifelt;1;9a
 wiese, die, -n;1;9a
 zeug, das (sg.);1;9a
+sich gewöhnen;1;9a
+sich interessieren;1;9a
+sich setzen;1;9a
+sich überlegen;1;9a
+sorgen;1;9a
 fest machen;1;9c
 perspektive, die, -n;1;9c
 diktieren;1;10c
@@ -135,7 +141,7 @@ lastenfahrrad, das, -er;2;1a
 sprachassistent, der, -en;2;1a
 steh-sitz-tisch, der, -e;2;1a
 türöffner, der, -;2;1a
-sich beeilen;2;1a
+sich entscheiden;2;1a
 an|schließen (1), er schließt an, schloss an, hat angeschlossen (er schließt den lautsprecher an den laptop an.);2;1b
 auf|laden, er lädt auf, lud auf, hat aufgeladen;2;1b
 bedienen;2;1b
@@ -147,7 +153,7 @@ slogan, der, -s;2;1b
 stumm (das handy stumm schalten);2;1b
 taste, die, -n;2;1b
 transport, der, -e;2;1b
-sich entscheiden;2;2a
+sich wohl|fühlen;2;2a
 anleitung, die, -en;2;3a
 an|schaffen (sich);2;3a
 bloß;2;3a
@@ -162,6 +168,7 @@ sonderangebot, das, -e;2;3a
 staubsauger, der, -;2;3a
 stehen (1), er steht, stand, hat gestanden (vor einer frage stehen);2;3a
 technisch;2;3a
+sich freuen;2;3a
 sich vor|bereiten;2;3a
 knopf, der, -e;2;3e
 nähen;2;3e
@@ -170,6 +177,8 @@ streichen, er streicht, strich, hat gestrichen;2;3e
 kopfhörer, der, -;2;4a
 ladekabel, das, -;2;4a
 powerbank, die, -s;2;4a
+sich aus|ruhen;2;4a
+verbringen;2;4a
 daher;2;4b
 darum (1) (max‘ lautsprecher geht nicht, darum lässt er ihn reparieren.);2;4b
 deswegen;2;4b
@@ -193,8 +202,7 @@ rein (es war reines glück, dass ich mein handy wieder gefunden habe.);2;5a
 verraten, er verrät, verriet, hat verraten;2;5a
 zurück|gehen, er geht zurück, ging zurück, ist zurückgegangen;2;5a
 zurück|zahlen;2;5a
-sich kümmern;2;5a
-träumen;2;5a
+sich aus|kennen;2;5a
 garantie, die, -n;2;5b
 laden, er lädt, lud, hat geladen (mein handy ist fast leer, ich muss es laden.);2;5b
 quittung, die, -en;2;5b
@@ -236,11 +244,13 @@ leisten (sich);2;7a
 sorge, die, -n (ich mache mir so viele sorgen um meine kinder.);2;7a
 trotz (+ g.);2;7a
 wegen (+ g.);2;7a
+sich kümmern;2;7a
 entsprechen, er entspricht, entsprach, hat entsprochen;2;7b
 einkaufsliste, die, -n;2;7c
 sparsam;2;7c
 von hand;2;7c
 gefahr, die, -en;2;7d
+sich ärgern;2;8a
 werbeanzeige, die, -n;2;9b
 ansprechend;2;9c
 unmodern;2;9c
@@ -256,6 +266,8 @@ markenname, der, -n;2;10a
 schmerztablette, die, -n;2;10a
 süßstoff, der, -e;2;10a
 taschentuch, das, -er;2;10a
+sich um|sehen;2;10a
+sich erinnern;2;10a
 an|sprechen, er spricht an, sprach an, hat angesprochen (werbung spricht sehr oft gefühle an.);2;10b
 aufmerksam;2;10b
 automatisch;2;10b
@@ -300,9 +312,7 @@ schulbildung, die (sg.);3;1a
 strafe, die, -n;3;1a
 tolerant;3;1a
 unterrichtsform, die, -en;3;1a
-sich beschweren;3;1a
 deuten;3;1a
-sorgen;3;1a
 gegensatz, der, -e;3;1b
 minimal;3;1b
 ausschließlich;3;2
@@ -326,6 +336,7 @@ vitamin, das, -e;3;2
 workout, das, -s;3;2
 erben;3;3a
 weshalb;3;3a
+verzichten;3;3a
 führen (zu + d.) (welche ereignisse können zu veränderungen führen?);3;3b
 gewohnt;3;3b
 krisensituation, die, -en;3;3b
@@ -396,7 +407,6 @@ wildtierstation, die, -en;3;3c
 wirbelsäule, die, -n;3;3c
 zufällig;3;3c
 zweimonatig;3;3c
-verzichten;3;4a
 literarisch;3;4b
 vergangene, das (sg.);3;4b
 vergangenheitsform, die, -en;3;4b
@@ -405,7 +415,7 @@ begeistern;3;4d
 historisch;3;4d
 stadtfest, das, -e;3;4d
 erstellen;3;5a
-sich erinnern;3;5a
+warten;3;5a
 alte, der/die, -n (wieder der/die alte sein);3;5b
 auf|wachen;3;5b
 außerhalb (+ g.);3;5b
@@ -436,7 +446,7 @@ auf|geben, er gibt auf, gab auf, hat aufgegeben;3;6d
 liebesgeschichte, die, -n;3;6d
 niemals;3;6d
 weg|ziehen, er zieht weg, zog weg, ist weggegangen;3;6d
-sich gewöhnen;3;7a
+sich unterhalten;3;7a
 büroangestellte, der/die, -n;3;8a
 camping, das (sg.);3;8b
 espresso-kanne, die, -n;3;8b
@@ -458,8 +468,6 @@ aus|suchen;3;9c
 nachher;3;9c
 begrüßen;3;10a
 benehmen, das (sg.);3;10a
-sich ärgern;3;10a
-verbringen;3;10a
 anwesend;3;10b
 auf|halten (1), er hält auf, hielt auf, hat aufgehalten (es ist höflich, anderen menschen die tür aufzuhalten.);3;10b
 begrüßung, die, -en;3;10b
@@ -524,7 +532,6 @@ spezialist, der, -en;4;1a
 spezialistin, die, -nen;4;1a
 urteil, das, -e;4;1a
 verbrechen, das, -;4;1a
-sich überlegen;4;1a
 analyse, die, -n;4;1b
 aus|tragen, er trägt aus, trug aus, hat ausgetragen (post austragen);4;1b
 briefträger, der, -;4;1b
@@ -543,10 +550,9 @@ daran;4;1c
 entwicklung, die, -en;4;1c
 ernst nehmen, er nimmt ernst, nahm ernst, hat ernst genommen;4;1c
 ursprünglich;4;1c
-sprechen;4;2a
 aus|halten, er hält aus, hielt aus, hat ausgehalten;4;3
 wunschberuf, der, -e;4;3
-berichten;4;3a
+sich bedanken;4;4a
 konjunktivform, die, -en;4;4d
 bedingungssatz, der, -e;4;5a
 frei|nehmen, er nimmt frei, nahm frei, hat freigenommen;4;5a
@@ -563,7 +569,6 @@ karton, der, -s;4;6a
 rechner, der, -;4;6a
 schere, die, -n;4;6a
 umschlag, der, -e;4;6a
-sich informieren;4;6a
 irren (sich) (in + d.);4;6c
 schütten (peinlich, heute habe ich einem kollegen aus versehen kaffee über das hemd geschüttet.);4;6c
 versehen, das, - (aus versehen);4;6c
@@ -575,7 +580,7 @@ verzeihen, er verzeiht, verzieh, hat verziehen;4;6d
 kürzlich;4;6e
 unfreundlich;4;7a
 variante, die, -n;4;7a
-sich um|sehen;4;8a
+sich konzentrieren;4;7a
 ab|schreiben, er schreibt ab, schrieb ab, hat abgeschrieben;4;8b
 anhang, der, -e;4;8b
 an|kommen (auf + d.), es kommt an, kam an, ist angekommen;4;8b
@@ -614,6 +619,7 @@ voraussetzung, die, -en;4;8b
 vorlage, die, -n;4;8b
 zukünftig;4;8b
 zweck, der, -e;4;8b
+sich beeilen;4;9a
 darüber;4;9b
 pronominaladverb, das, -ien;4;9b
 befriedigend;4;9c
@@ -701,7 +707,6 @@ rind, das, -er;5;1a
 trinkwasser, das (sg.);5;1a
 verbrauchen;5;1a
 verpackungsmüll, der (sg.);5;1a
-sich streiten;5;1a
 bioprodukt, das, -e;5;2a
 recycling, das (sg.);5;2a
 region, die, -en;5;2a
@@ -744,11 +749,12 @@ zerstören;5;2b
 begriff, der, -e;5;3
 berechnen;5;3
 fußabdruck, der, -e;5;3
+sich beschweren;5;3a
+sich streiten;5;3a
 geschirrspüler, der, -;5;4a
 glasflasche, die, -n;5;4a
 öko-duell, das, -e;5;4a
 plastikflasche, die, -n;5;4a
-sich langweilen;5;4a
 allerdings;5;4b
 bedarf, der (sg.);5;4b
 duschzeit, die, -en;5;4b
@@ -769,11 +775,10 @@ wahl (2), die, -en (eine wahl treffen);5;4b
 ökovergleich, der, -e;5;5a
 alternative, die, -n;5;6a
 pfandflasche, die, -n;5;6a
-sich konzentrieren;5;6a
-sich setzen;5;6a
+sich registrieren;5;6a
 energiekosten, die (pl.);5;6b
 satzzeichen, das, -;5;7a
-sich freuen;5;7a
+berichten;5;7a
 müllproblem, das, -e;5;7b
 absatz, der, -e;5;8a
 allein;5;8a
@@ -817,7 +822,6 @@ pfandbecher, der, -;5;9a
 retten;5;9a
 verlangen;5;9a
 wegwerfbecher, der, -;5;9a
-denken;5;9a
 aktion, die, -en;5;9b
 elektronisch;5;9c
 stromverbrauch, der (sg.);5;9c
@@ -833,7 +837,8 @@ umsonst;5;10
 uni-mensa, die, -mensen;5;10
 völlig;5;10
 widersprechen, er widerspricht, widersprach, hat widersprochen;5;10
-sich verirren;5;10a
+sich spiegeln;5;10a
+träumen;5;10a
 blitz, der, -e;5;11a
 blitzen;5;11a
 donner, der, -;5;11a
@@ -910,15 +915,11 @@ planet, der, -en;6;1a
 staubsaugen;6;1a
 übernehmen, er übernimmt, übernahm, hat übernommen (die aufgaben übernehmen);6;1a
 wohnanlage, die, -n;6;1a
-sich interessieren;6;1a
-sich vor|stellen;6;1a
 prognose, die, -n;6;1b
 von ... aus (ich arbeite viel von zu hause aus.);6;2a
-sich aus|kennen;6;2a
 anlass, der, -e;6;3a
 silvester, - (ohne artikel);6;3a
 vor|nehmen (sich), er nimmt vor, nahm vor, hat vorgenommen;6;3a
-sich bedanken;6;3a
 ausrede, die, -n;6;3b
 befragen;6;3b
 dauernd;6;3b
@@ -934,6 +935,7 @@ futur, das (sg.);6;3d
 wahrheit, die, -en;6;3e
 gelingen, es gelingt, gelang, ist gelungen;6;4a
 realisieren;6;4a
+sich langweilen;6;4a
 hauptproblem, das, -e;6;4b
 konkret;6;4b
 eventuell;6;5a
@@ -941,14 +943,13 @@ n-deklination, die, -en;6;5a
 praktikant, der, -en;6;5a
 praktikantin, die, -nen;6;5a
 zitat, das, -e;6;5a
-sich wohl|fühlen;6;5a
-warten;6;5a
 affe, der, -n;6;5b
 elefant, der, -en;6;5b
 löwe, der, -n;6;5b
 pädagoge, der, -n;6;5b
 pädagogin, die, -nen;6;5b
 vokallänge, die, -n;6;6a
+sich verirren;6;6a
 anonym;6;7b
 arbeitsort, der, -e;6;7b
 auf|halten (3) (sich), er hält auf, hielt auf, hat aufgehalten (sie hält sich viel in der küche der wg auf.);6;7b
@@ -995,7 +996,7 @@ volkshochschule, die, -n;6;7c
 zirkus, der, -se;6;7c
 anteil, der, -e;6;7d
 um|formulieren;6;8a
-sich aus|ruhen;6;8a
+sich leisten;6;8a
 kasus, der (sg.);6;8b
 bürgermeister, der, -;6;8c
 bürgermeisterin, die, -nen;6;8c
@@ -1010,7 +1011,6 @@ piano, das, -s;6;9
 schlagzeug, das, -e;6;9
 violine, die, -n;6;9
 vorfreude, die (sg.);6;9a
-sich spiegeln;6;9a
 melodie, die, -n;6;9b
 rhythmus, der, rhythmen;6;9b
 stern, der, -e;6;9b
@@ -1037,7 +1037,7 @@ jury, die, -s;6;10a
 preis, der, -e;6;10a
 songwriter, der, -;6;10a
 songwriterin, die, -nen;6;10a
-sich leisten;6;10a
+sich informieren;6;10a
 mit|singen, er singt mit, sang mit, hat mitgesungen;6;10b
 song, der, -s;6;10b
 songtitel, der, -;6;10b

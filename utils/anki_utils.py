@@ -30,12 +30,6 @@ def create_anki_model():
         "params": {
             "modelName": model_name,
             "inOrderFields": [
-                "Wort_DE", "Wortarten", "Wort_SL", "Artikel", "Plural", "Praesens", "Praeteritum", "Perfekt",
-                "Satz1_DE", "Satz1_SL", "Satz2_DE", "Satz2_SL", "Satz3_DE", "Satz3_SL",
-                "Audio_Wort", "Audio_S1", "Audio_S2", "Audio_S3", "Bild", "Reflexiv", "Praeposition",
-                "Unregelmaeßig_Verb", "Unregelmaeßig_Adjective", "Komparativ", "Superlativ", "Benutzerkommentare"
-            ],
-            "inOrderFields": [
                 # Word details
                 "Wort_DE", "Wort_SL", "Wortarten", "Artikel", "Plural", 
                 # Verb details
@@ -49,7 +43,6 @@ def create_anki_model():
                 # Comments
                 "Benutzerkommentare"
             ],
-            
             "cardTemplates": card_templates,
             "css": """
                 .card {
