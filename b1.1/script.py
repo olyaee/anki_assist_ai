@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 from collections import Counter
+import random
 
 def read_verbs_with_prepositions(file_path):
     """Read and return verbs with prepositions from CSV file."""
@@ -13,6 +14,65 @@ def display_top_verbs(df, n=5):
     """Display top n rows of the verbs dataframe."""
     print(f"\nTop {n} rows of the verbs with prepositions:")
     print(df.head(n))
+
+def add_additional_verbs_to_exercises():
+    """Process reflexive verbs and verbs with prepositions and add them to a new combined CSV file"""
+    # Read existing word exercises
+    word_exercises_df = pd.read_csv('b1.1/word_exercises.csv', delimiter=';')
+    
+    # Read reflexive verbs
+    reflexive_df = pd.read_csv('b1.1/reflexive_verben_removed_duplicates.csv', 
+                              delimiter='\t', 
+                              names=['verb', 'example', 'unused'])
+    reflexive_words = reflexive_df['verb'].tolist()
+    
+    # Read verbs with prepositions
+    preposition_df = pd.read_csv('b1.1/verbs_with_praposition_removed_duplicates.csv', 
+                                delimiter='\t', 
+                                names=['verb', 'preposition', 'example'])
+    preposition_words = preposition_df['verb'].tolist()
+    
+    # Combine all words and create new entries
+    new_entries = []
+    for word in reflexive_words + preposition_words:
+        new_entries.append({
+            'word': word,
+            'lecture': int(random.randint(1, 6)),  # Store as integer
+            'exercise': f"{random.randint(1, 10)}a"  # Add 'a' to match format of original file
+        })
+    
+    # Create DataFrame from new entries
+    new_df = pd.DataFrame(new_entries)
+    
+    # Combine with existing exercises
+    combined_df = pd.concat([word_exercises_df, new_df], ignore_index=True)
+    
+    # Convert lecture to numeric for proper sorting
+    combined_df['lecture'] = pd.to_numeric(combined_df['lecture'])
+    
+    # Custom sorting function for exercise column
+    def exercise_sort_key(ex):
+        # Extract number and letter parts
+        match = re.match(r'(\d+)([a-z])?', str(ex))
+        if match:
+            num = int(match.group(1))
+            letter = match.group(2) or 'a'  # Default to 'a' if no letter
+            return (num, letter)
+        return (float('inf'), 'z')  # Put invalid formats at the end
+    
+    # Sort by lecture numerically and exercise using custom key
+    combined_df = combined_df.sort_values(
+        by=['lecture', 'exercise'],
+        key=lambda x: x.map(exercise_sort_key) if x.name == 'exercise' else x
+    )
+    
+    # Save to new CSV file
+    output_file = 'b1.1/word_exercises_combined_with_the_other_two_files.csv'
+    combined_df.to_csv(output_file, index=False, sep=';')
+    
+    print(f"\nCreated new file '{output_file}' with {len(combined_df)} total words ({len(new_entries)} new words added)")
+    print("\nFirst few entries of the combined file:")
+    print(combined_df.head(10))  # Show more entries to verify sorting
 
 def find_lines_without_numbers(file_path):
     """Find and return lines that don't contain any numbers."""
@@ -135,6 +195,9 @@ def main():
 
     # Create CSV from words.txt with sorting by exercise
     create_word_exercise_csv('b1.1/words.txt', 'b1.1/word_exercises.csv', sort_by_exercise=True)
+    
+    # Add reflexive verbs and verbs with prepositions to the exercises
+    add_additional_verbs_to_exercises()
 
 if __name__ == "__main__":
     main()

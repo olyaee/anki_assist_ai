@@ -28,6 +28,10 @@ with open('config.yml', 'r') as config_file:
 # Retrieve configuration values
 api_key = os.getenv('OPENAI_API_KEY')
 files_dir = config['files']['directory']
+
+# Create files directory if it doesn't exist
+os.makedirs(files_dir, exist_ok=True)
+
 deck_name = config['anki']['deck_name']
 text_model = config['openai']['text_model']
 image_model = config['openai']['image_model']
