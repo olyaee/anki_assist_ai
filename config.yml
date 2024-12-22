@@ -25,7 +25,6 @@ languages:
 
 prompt:
   system_message: >
-    <prompt>
     You will create a dictionary-style **German Word Profile** for the given word, regardless of whether the input is in German or source language. Our source language is **{source_language}**. Follow the steps below:
 
     1. **Detect the Input Language**:
@@ -104,12 +103,11 @@ prompt:
         - **None of the above**:
             - Indicate that the word is none of them with '()'.
 
-    4. **Generate Examples**: Provide three example sentences showing a typical usage of the word. The exammples must follow the following rules:
-        - Use the grammer of the Lecture {lecture_number}. The grammer of the lectures are indicated the section <Grammer> <Grammer/>. and Lecture sections are indicated with %%% %%%. We have in total 6 Lectures. 
+    4. **Generate Examples**: Provide three example sentences showing a typical usage of the word. The examples must follow these rules:
+        - Use the grammar from Lecture {lecture_number} that is provided in the <Grammar> <Grammar/> section. This contains the specific grammar points covered in this lecture.
         - The examples should be at the {proficiency_level} level.
-        - Try to use words of the {proficiency_level} level that are mentioned in <Vocabulary> <Vocabulary/>.
         - Each example should be both in German and {source_language}.
-    </prompt>
+        - Make sure to demonstrate the grammar points from Lecture {lecture_number} in your examples.
 
   image_prompt: >
     Create an image for the given word: {german_word}. Focus on a purely visual depiction that helps language learners grasp the essence of the word at a glance.

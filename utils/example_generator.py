@@ -45,36 +45,56 @@ json_schema = config['schema']
 client = OpenAI(api_key=api_key)
 openai.api_key = api_key
 
-def read_vocabulary(vocabulary_file):
-    """Read the vocabulary from word_exercises.csv."""
-    try:
-        df = pd.read_csv(vocabulary_file, delimiter=';')
-        return '\n'.join(df['word'].tolist())
-    except Exception as e:
-        logging.error(f"Error reading vocabulary: {e}")
-        return ""
-
-def read_grammar(grammar_file):
-    """Read the grammar content from grammar.md."""
+def read_grammar(grammar_file, lecture_number):
+    """Read the grammar content for a specific lecture from grammar.md.
+    
+    Args:
+        grammar_file (str): Path to the grammar file
+        lecture_number (int): The lecture number to extract grammar for
+        
+    Returns:
+        str: The grammar content for the specified lecture
+    """
     try:
         with open(grammar_file, 'r') as file:
-            return file.read()
+            content = file.read()
+            
+            # Find the start marker for the requested lecture
+            current_lecture_marker = f"### Lektion {lecture_number}"
+            next_lecture_marker = f"### Lektion {lecture_number + 1}"
+            
+            # Find the start position of the current lecture
+            start_pos = content.find(current_lecture_marker)
+            if start_pos == -1:
+                return ""  # Lecture not found
+                
+            # Find the start position of the next lecture
+            end_pos = content.find(next_lecture_marker)
+            if end_pos == -1:
+                # If there's no next lecture, take until the end
+                section_content = content[start_pos:].strip()
+            else:
+                # Take content between current and next lecture
+                section_content = content[start_pos:end_pos].strip()
+            
+            # Clean up the content by removing %%% markers
+            return section_content.replace('%%%', '').strip()
+                
     except Exception as e:
-        logging.error(f"Error reading grammar: {e}")
+        logging.error(f"Error reading grammar for lecture {lecture_number}: {e}")
         return ""
 
-def get_translation_and_example(word, source_language, proficiency_level, vocabulary_file, grammar_file, lecture_number, ubung):
+def get_translation_and_example(word, source_language, proficiency_level, grammar_file, lecture_number, ubung):
     """Generate translation and example sentences for a given word."""
-    # Read vocabulary and grammar
-    vocabulary = read_vocabulary(vocabulary_file)
-    grammar = read_grammar(grammar_file)
+    # Read grammar for specific lecture
+    grammar = read_grammar(grammar_file, lecture_number)
     
     # Construct the complete prompt with system message at the end
-    complete_prompt = f"<Vocabulary>\n{vocabulary}\n</Vocabulary>\n\n<Grammar>\n{grammar}\n</Grammar>\n\n{system_message_template}"
+    complete_prompt = f"<Grammar>\n{grammar}\n</Grammar>\n\n{system_message_template}"
+    print(complete_prompt)
 
     # Format the prompt with the provided parameters
     system_message = complete_prompt.format(source_language=source_language, proficiency_level=proficiency_level, lecture_number=lecture_number)
-    
     response = client.chat.completions.create(
         model=text_model,
         messages=[
@@ -136,7 +156,7 @@ def generate_image_from_profile(word_profile):
         None
     """
     # Format the image prompt with the word profile data
-    image_prompt = image_prompt_template.format(german_word=word_profile['german_word'])
+    image_prompt = image_prompt_template.format(german_word=word_profile['original_word'])
 
     image_response = client.images.generate(
         model=image_model,
