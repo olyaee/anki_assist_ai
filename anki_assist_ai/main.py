@@ -76,6 +76,7 @@ def word_list_profile(
     generate_image: bool = False,
     generate_tts: bool = False,
     add_to_anki: bool = False,
+    start_row: int = 0,
 ) -> None:
     """Generate profiles for a list of words from CSV.
 
@@ -87,12 +88,18 @@ def word_list_profile(
         generate_image: Whether to generate images
         generate_tts: Whether to generate TTS
         add_to_anki: Whether to add to Anki
+        start_row: Row index to start processing from (0-based)
     """
-    for _, row in word_csv.iterrows():
-        word = row.iloc[0]  # Get word from first column
-        lecture = row.iloc[1]  # Get lecture from second column
-        ubung = row.iloc[2]  # Get ubung from third column
-        print(f"\nProcessing row {_ + 1} of {len(word_csv)}: {word}")
+    # Skip rows before start_row
+    for idx, row in enumerate(word_csv.iterrows()):
+        if idx < start_row:
+            continue
+            
+        _, row_data = row
+        word = row_data.iloc[0]  # Get word from first column
+        lecture = row_data.iloc[1]  # Get lecture from second column
+        ubung = row_data.iloc[2]  # Get ubung from third column
+        print(f"\nProcessing row {idx + 1} of {len(word_csv)}: {word}")
         single_word_profile(
             grammar_file,
             word,
@@ -116,9 +123,11 @@ if __name__ == "__main__":
     generate_image = False
     generate_tts = False
     add_to_anki = True
+    start_row = 250  # Start from the beginning, change this to skip rows
 
     # Read the CSV file
     df = pd.read_csv(csv_file, delimiter=";")
+    print(f"Total rows in CSV: {len(df)}")
     word_list_profile(
         grammar_file,
         df,
@@ -127,4 +136,5 @@ if __name__ == "__main__":
         generate_image,
         generate_tts,
         add_to_anki,
+        start_row,
     )
