@@ -91,7 +91,6 @@ def get_translation_and_example(word, source_language, proficiency_level, gramma
     
     # Construct the complete prompt with system message at the end
     complete_prompt = f"<Grammar>\n{grammar}\n</Grammar>\n\n{system_message_template}"
-    print(complete_prompt)
 
     # Format the prompt with the provided parameters
     system_message = complete_prompt.format(source_language=source_language, proficiency_level=proficiency_level, lecture_number=lecture_number)
