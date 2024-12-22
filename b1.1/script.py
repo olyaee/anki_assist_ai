@@ -76,14 +76,14 @@ def find_suffix_patterns(input_file):
     return sorted_suffixes
 
 def create_word_exercise_csv(input_file, output_file, sort_by_exercise=False):
-    """Create a CSV file with words and their exercise numbers."""
+    """Create a CSV file with words, lecture numbers, and exercise numbers."""
     # Pattern to match exercise numbers like 4/8b, 1/9a, 5/2b üb at the end of line
-    exercise_pattern = r'(.*?)\s+(\d+/\d+[a-z]*(?: üb)?)\s*$'
+    exercise_pattern = r'(.*?)\s+(\d+)/(\d+[a-z]*)(?: üb)?\s*$'
     
     # Write directly to file to avoid pandas quoting issues
     with open(output_file, 'w') as outfile:
         # Write header
-        outfile.write('word;exercise\n')
+        outfile.write('word;lecture;exercise\n')
         
         with open(input_file, 'r') as infile:
             words_and_exercises = []
@@ -94,22 +94,27 @@ def create_word_exercise_csv(input_file, output_file, sort_by_exercise=False):
                     match = re.search(exercise_pattern, line)
                     if match:
                         word_text = match.group(1).strip()
-                        # Remove 'üb' from exercise number
-                        exercise_num = match.group(2).replace(' üb', '')
-                        words_and_exercises.append((word_text, exercise_num))
+                        lecture_num = match.group(2)
+                        exercise_num = match.group(3)
+                        words_and_exercises.append((word_text, lecture_num, exercise_num))
             
-            # Sort if requested
-            if sort_by_exercise:
-                def sort_key(item):
-                    # Extract chapter and section for sorting
-                    chapter, section = re.match(r'(\d+)/(\d+[a-z]*)', item[1]).groups()
-                    return (int(chapter), section)
-                
-                words_and_exercises.sort(key=sort_key)
+            # Sort by lecture and then by exercise
+            def sort_key(item):
+                # Extract lecture and exercise for sorting
+                lecture = int(item[1])
+                # Extract numeric and alphabetic parts of exercise
+                exercise_match = re.match(r'(\d+)([a-z]*)', item[2])
+                if exercise_match:
+                    exercise_num = int(exercise_match.group(1))
+                    exercise_letter = exercise_match.group(2) or ''
+                    return (lecture, exercise_num, exercise_letter)
+                return (lecture, 0, '')
+            
+            words_and_exercises.sort(key=sort_key)
             
             # Write to file
-            for word, exercise in words_and_exercises:
-                outfile.write(f'{word};{exercise}\n')
+            for word, lecture, exercise in words_and_exercises:
+                outfile.write(f'{word};{lecture};{exercise}\n')
     
     # Read back for display
     df = pd.read_csv(output_file, delimiter=';')
