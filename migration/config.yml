@@ -1,0 +1,277 @@
+languages:
+  supported_source_languages:
+    - English
+    - Farsi
+    - Spanish
+    - French
+    - German
+    - Italian
+    - Japanese
+    - Korean
+    - Portuguese
+    - Russian
+    - Chinese
+    - Turkish
+    - Arabic
+    - Hindi
+
+  supported_proficiency_levels:
+    - A1
+    - A2
+    - B1
+    - B2
+    - C1
+    - C2
+
+prompt:
+  system_message: >
+    You are an expert German language teacher creating comprehensive word profiles for {proficiency_level} learners. The source language is {source_language}.
+
+    ## Task Overview
+    Create a detailed German word profile that includes: translation, grammatical information, and three contextual example sentences that incorporate grammar from Lecture {lecture_number}.
+
+    ## Step 1: Language Detection & Translation
+
+    **Input Processing:**
+    - If the input word is in {source_language}, first translate it to German
+    - If already in German, use it directly
+    - For polysemous words (multiple meanings), list ALL common meanings ordered from most to least frequent
+    - Examples: "Schlüssel" → ['Key (for a door)', 'Key (solution/essential idea)'] | "Bank" → ['Bank (financial)', 'Bench (furniture)', 'Bank (of river)']
+
+    ## Step 2: Complete Grammatical Analysis
+
+    Provide comprehensive grammatical details based on word type:
+
+    **Nouns (n):**
+    - Article: der/die/das
+    - Plural formation: Show the ending (e.g., "-n", "-e", "-er") or mark as "sg." (singular only) or "pl." (plural only)
+    - Examples: "Hütte → -n" | "Himmel → -" | "Ökostrom → sg."
+
+    **Verbs (v):**
+    - Regularity: regular or irregular
+    - Conjugations (er-form only): Präsens, Präteritum, Perfekt
+      - Example: "entschließen → er entschließt, entschloss, hat entschlossen"
+    - Reflexive: Indicate if reflexive (e.g., "sich kümmern" → True, "gehen" → False)
+    - Preposition: If verb requires a preposition, show with case (e.g., "schützen (vor + D.)", "verzichten (auf + A.)")
+
+    **Adjectives (adj):**
+    - Regularity: regular or irregular
+    - Forms: comparative, superlative (e.g., "gut → besser, am besten" | "klein → kleiner, am kleinsten")
+    - Preposition: If applicable (e.g., "stolz (auf + A.)", "zufrieden (mit + D.)")
+
+    **Other Word Types:**
+    Mark as: (adv) for adverbs, (pron) for pronouns, (prep) for prepositions, (conj) for conjunctions, or () if none apply.
+
+    ## Step 3: Create Engaging Example Sentences
+
+    **Critical Requirements:**
+    Generate THREE example sentences that demonstrate authentic, memorable usage appropriate for {proficiency_level} learners.
+
+    **Grammar Integration (MOST IMPORTANT):**
+    You MUST incorporate the specific grammar structures from Lecture {lecture_number} provided in the <Grammar></Grammar> section. Each example should naturally demonstrate at least one grammar point from this lecture.
+
+    **Quality Guidelines:**
+    - Make examples personally relatable and contextually rich—situations learners might encounter
+    - Use vivid, specific scenarios rather than generic statements
+    - Show the word in different contexts when it has multiple meanings
+    - Vary sentence structure and complexity within the {proficiency_level} range
+    - Include both German and {source_language} translations for each example
+    - Examples should feel natural, not forced or overly academic
+
+    **Example Quality:**
+    Good: "Ich habe meinen Schlüssel verloren und kann nicht in die Wohnung." (relatable, specific situation)
+    Poor: "Der Schlüssel ist wichtig." (too generic, not memorable)
+
+  image_prompt: >
+    Create a unique, memorable visual mnemonic for the German word "{german_word}" that will help language learners instantly recall its meaning.
+
+    ## Core Principle: WORD-SPECIFIC IMAGERY FIRST
+
+    **Focus on the word's actual meaning, NOT generic German stereotypes.** Each image must be visually distinct and directly represent the word itself.
+
+    **Visual Mnemonic Strategy:**
+    - Analyze the word's specific meaning and create imagery that directly illustrates it
+    - Design a single, striking scene unique to THIS word—not a generic cultural template
+    - Make it emotionally engaging and visually distinctive
+    - Avoid repetitive elements: no default pretzels, beer, lederhosen, or half-timbered buildings unless the word specifically requires them
+
+    **Diversity Requirements (CRITICAL):**
+    - **Vary visual style**: Alternate between modern/traditional, realistic/abstract, minimalist/detailed, warm/cool tones
+    - **Vary settings**: Urban/rural, indoor/outdoor, nature/architecture, day/night, different seasons
+    - **Vary perspectives**: Close-up/wide shot, bird's eye/ground level, symmetrical/asymmetric
+    - **Vary color palettes**: Each image should have a distinct color scheme (vibrant vs muted, warm vs cool, monochromatic vs colorful)
+    - **Vary subjects**: Different types of people (age, profession, activity), animals, objects, or abstract concepts depending on the word
+
+    **Composition Guidelines:**
+    - Subject: Clear, recognizable element that embodies the word's meaning
+    - Action: Dynamic movement or emotion when applicable
+    - Setting: Choose based on the WORD, not cultural assumptions
+    - Style: Clean illustration with bold colors—clarity over complexity
+    - Lighting: Varied and dramatic to enhance memorability
+
+    **Memory Enhancement:**
+    - ONE focused concept per image
+    - Use unexpected angles, exaggerated features, or surprising compositions
+    - Include emotional cues: expressions, body language, atmospheric elements
+    - Make each image feel different from previous ones
+
+    **Technical Constraints:**
+    - No text, letters, numbers, signs, or labels
+    - No watermarks or logos
+    - 1:1 square format, clear at 256x256px
+
+    **Examples of Good Variation:**
+    - "Himmel" (sky): Expansive sunset landscape with dramatic clouds (NOT German buildings)
+    - "Tisch" (table): Modern minimalist dining scene or cozy family dinner (NOT traditional Bavarian setting)
+    - "laufen" (run): Athletic person jogging in a park at dawn (NOT someone in dirndl)
+
+    Generate a visually unique image that makes "{german_word}" unforgettable through word-specific, diverse imagery.
+
+gemini:
+  # Text generation model
+  text_model: "gemini-2.5-flash"
+
+  # Image generation (Nano Banana)
+  image_model: "gemini-2.5-flash-image"
+  image_aspect_ratio: "1:1"  # Options: 1:1, 16:9, 4:3, 3:2, 9:16, 3:4, 2:3, 5:4, 4:5, 21:9
+  image_size: "1K"  # Options: 1K, 2K, 4K
+
+  # Text-to-speech
+  tts_model: "gemini-2.5-flash-preview-tts"
+  tts_voices:  # 8 main voices (4 male, 4 female), will be randomly selected
+    - Zephyr
+    - Puck
+    - Charon
+    - Kore
+    - Fenrir
+    - Leda
+    - Orus
+    - Aoede
+
+schema:
+  type: object
+  properties:
+    original_word: { type: string }
+    german_word: { type: string }
+    classification: 
+      type: string 
+      enum: ["(n)", "(v)", "(adj)", "(adv)", "(pron)", "(prep)", "(conj)", "()"]
+    source_language_translation: 
+      type: array
+      items:
+        type: string
+      description: "List of translations of the German word in the source language"
+      minItems: 1
+    additional_grammatical_info:
+      type: object
+      properties:
+        noun:
+          type: object
+          properties:
+            article: 
+              type: string 
+              enum: ["der", "die", "das"]
+            plural_form: { type: string }
+        verb:
+          type: object
+          properties:
+            irregular: { type: boolean }
+            infinitive: { type: string }
+            praesens: { type: string }
+            praeteritum: { type: string }
+            perfekt: { type: string }
+            reflexive: { type: boolean }
+            praeposition: { type: string }
+        adjective:
+          type: object
+          properties:
+            irregular: { type: boolean }
+            comparative: { type: string }
+            superlative: { type: string }
+            praeposition: { type: string }
+    examples:
+      type: array
+      minItems: 3
+      maxItems: 3
+      items:
+        type: object
+        properties:
+          german_example: { type: string }
+          source_example_translation: { type: string }
+        required: ["german_example", "source_example_translation"]
+      minContains: 3
+      maxContains: 3
+  required: ["original_word", "german_word", "classification", "source_language_translation", "examples", "additional_grammatical_info"]
+
+files:
+  directory: "./files"
+
+anki:
+  deck_name: "Netzwerk neu B1.1"
+  model_name: "Custom_German_Learning_English_B1.1"
+  connect_url: "http://localhost:8765"
+  card_templates:
+    - Name: "Card 1 DE->SL"
+      Front: "{{Wort_DE}}{{Wortarten}}{{Audio_Wort}}"
+      Back: |
+        {{#Artikel}}{{Artikel}}{{/Artikel}}
+        {{#Reflexiv}}{{Reflexiv}}{{/Reflexiv}}
+        {{Wort_DE}}{{Wortarten}}
+        {{#Plural}}{{Plural}}{{/Plural}}
+        {{#Praeposition}}{{Praeposition}}{{/Praeposition}}
+        <div>{{Bild}}</div>
+        <div style='font-family: Arial; font-size: 16px;'>
+        {{#Unregelmaeßig_Verb}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Verb}}
+        {{#Unregelmaeßig_Adjective}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Adjective}}
+        {{#Praesens}}{{Praesens}}, {{/Praesens}}{{#Praeteritum}}{{Praeteritum}}, {{/Praeteritum}}{{#Perfekt}}{{Perfekt}}{{/Perfekt}}
+        {{#Komparativ}}{{Komparativ}}, {{/Komparativ}}{{#Superlativ}}{{Superlativ}}{{/Superlativ}}
+        </div>
+        <hr id=answer>
+        {{Wort_SL}}
+        <hr>
+        <div style="display:none">[sound:_LongSilence.mp3]</div>
+        {{#Satz1_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz1_DE}}{{Audio_S1}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz1_SL}}</div><br>
+        {{/Satz1_DE}}
+        {{#Satz2_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz2_DE}}{{Audio_S2}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz2_SL}}</div><br>
+        {{/Satz2_DE}}
+        {{#Satz3_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz3_DE}}{{Audio_S3}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz3_SL}}</div><br>
+        {{/Satz3_DE}}
+
+    - Name: "Card 2 SL->DE"
+      Front: "{{Wort_SL}}"
+      Back: |
+        {{#Artikel}}{{Artikel}}{{/Artikel}}
+        {{#Reflexiv}}{{Reflexiv}}{{/Reflexiv}}
+        {{Wort_DE}}{{Wortarten}}
+        {{#Plural}}{{Plural}}{{/Plural}}
+        {{#Praeposition}}{{Praeposition}}{{/Praeposition}}
+        <div>{{Bild}}</div>
+        <div style='font-family: Arial; font-size: 16px;'>
+        {{#Unregelmaeßig_Verb}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Verb}}
+        {{#Unregelmaeßig_Adjective}}<span class="label" style="background-color: #e3f2fd; color: #1565c0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">Unregelmäßig</span>{{/Unregelmaeßig_Adjective}}
+        {{#Praesens}}{{Praesens}}, {{/Praesens}}{{#Praeteritum}}{{Praeteritum}}, {{/Praeteritum}}{{#Perfekt}}{{Perfekt}}{{/Perfekt}}
+        {{#Komparativ}}{{Komparativ}}, {{/Komparativ}}{{#Superlativ}}{{Superlativ}}{{/Superlativ}}
+        </div>
+        <hr id=answer>
+        {{Wort_SL}}
+        <hr>
+        <div style="display:none">[sound:_LongSilence.mp3]</div>
+        {{#Satz1_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz1_DE}}{{Audio_S1}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz1_SL}}</div><br>
+        {{/Satz1_DE}}
+        {{#Satz2_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz2_DE}}{{Audio_S2}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz2_SL}}</div><br>
+        {{/Satz2_DE}}
+        {{#Satz3_DE}}
+        <div style='font-family: Arial; font-size: 16px;'>{{Satz3_DE}}{{Audio_S3}}</div>
+        <div style='font-family: Arial; font-size: 14px;'>{{Satz3_SL}}</div><br>
+        {{/Satz3_DE}}
+
