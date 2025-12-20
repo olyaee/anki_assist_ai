@@ -113,12 +113,12 @@ def generate_media_files(files_dir, word_data):
         dict: A dictionary with the stored media file names.
     """
     # Store word audio
-    audio_word = store_media_file(files_dir, word_data['german_word'], "word.mp3")
+    audio_word = store_media_file(files_dir, word_data['german_word'], "word.wav")
 
     # Store audio for example sentences (if present)
     examples = word_data.get("examples", [])
     audio_examples = [
-        store_media_file(files_dir, word_data['german_word'], f"example_{i + 1}.mp3")
+        store_media_file(files_dir, word_data['german_word'], f"example_{i + 1}.wav")
         for i in range(len(examples))
     ]
 

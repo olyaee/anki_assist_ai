@@ -225,6 +225,72 @@ def process_existing_profiles(
         logging.error(f"Error accessing directory {files_dir}: {str(e)}")
 
 
+def find_irregular_words(files_dir: str = "./files") -> dict[str, dict]:
+    """Find all words that have irregular verbs or adjectives.
+
+    Args:
+        files_dir: Directory containing the word profile JSON files
+
+    Returns:
+        Dictionary mapping German words to their irregularity information
+    """
+    irregular_words = {}
+
+    try:
+        # Get all JSON files in the directory
+        json_files = [f for f in os.listdir(files_dir) if f.endswith("_profile.json")]
+
+        for json_file in json_files:
+            file_path = os.path.join(files_dir, json_file)
+            try:
+                with open(file_path) as f:
+                    profile = json.load(f)
+
+                word = profile["german_word"]
+                irregular_types = []
+                irregular_info = {}
+
+                # Check verb irregularity
+                verb_info = profile.get("additional_grammatical_info", {}).get("verb", {})
+                if verb_info.get("irregular", False):
+                    irregular_types.append("verb")
+                    irregular_info["verb"] = verb_info
+
+                # Check adjective irregularity
+                adj_info = profile.get("additional_grammatical_info", {}).get("adjective", {})
+                if adj_info.get("irregular", False):
+                    irregular_types.append("adjective")
+                    irregular_info["adjective"] = adj_info
+
+                # If any irregularities found, add to results
+                if irregular_types:
+                    irregular_words[word] = {
+                        "types": irregular_types,
+                        "info": irregular_info
+                    }
+
+            except json.JSONDecodeError:
+                logging.error(f"Error decoding JSON file: {json_file}")
+            except KeyError:
+                logging.error(f"Missing required fields in file: {json_file}")
+            except Exception as e:
+                logging.error(f"Error processing file {json_file}: {str(e)}")
+
+    except Exception as e:
+        logging.error(f"Error accessing directory {files_dir}: {str(e)}")
+
+    # Print results
+    if irregular_words:
+        print("\nIrregular words:")
+        for word in sorted(irregular_words.keys()):
+            print(f"- {word}")
+        print(f"\nTotal: {len(irregular_words)}")
+    else:
+        print("\nNo irregular words found.")
+
+    return irregular_words
+
+
 if __name__ == "__main__":
     # Configure logging
     logging.basicConfig(
@@ -237,11 +303,11 @@ if __name__ == "__main__":
     print("=" * 30)
     process_existing_profiles(
         generate_image=False,
-        generate_tts=True,  # Don't generate new TTS
-        add_silence=True,    # Just add silence to existing files
-        silence_duration_ms=1000,  # 50 seconds
-        add_to_anki=True,  # Add/update cards in Anki
-        limit=3,
+        generate_tts=True,
+        add_silence=True,
+        silence_duration_ms=1000,  # 1 second
+        add_to_anki=True,
+        limit=1,
     )
 
     # Find words with missing sentences
@@ -249,3 +315,6 @@ if __name__ == "__main__":
 
     # Find items with asterisks
     items_with_asterisks = find_items_with_asterisks()
+
+    # Find irregular words
+    irregular_words = find_irregular_words()

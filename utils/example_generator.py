@@ -1,7 +1,7 @@
 from PIL import Image
 import requests
-from openai import OpenAI
-import openai
+from google import genai
+from google.genai import types
 import json
 import random
 import os
@@ -9,41 +9,43 @@ import yaml
 from dotenv import load_dotenv
 import logging
 import sys
-import pandas as pd
+import base64
+import wave
+import time
 from .cost_calculator import calculate_cost
 
 # Load environment variables
 load_dotenv()
-# Retrieve the API key from environment variables
-api_key = os.getenv('OPENAI_API_KEY')
+# Retrieve API key from environment variables
+google_api_key = os.getenv('GOOGLE_AI_API_KEY')
 
-if not api_key:
-    logging.error("OpenAI API key not found. Please set it in the .env file.")
+if not google_api_key:
+    logging.error("Google AI API key not found. Please set GOOGLE_AI_API_KEY in the .env file.")
     sys.exit(1)
+
+# Initialize Gemini client
+client = genai.Client(api_key=google_api_key)
 
 # Load configuration from config.yml
 with open('config.yml', 'r') as config_file:
     config = yaml.safe_load(config_file)
 
 # Retrieve configuration values
-api_key = os.getenv('OPENAI_API_KEY')
 files_dir = config['files']['directory']
 
 # Create files directory if it doesn't exist
 os.makedirs(files_dir, exist_ok=True)
 
 deck_name = config['anki']['deck_name']
-text_model = config['openai']['text_model']
-image_model = config['openai']['image_model']
-image_size = config['openai']['image_size']
-tts_model = config['openai']['tts_model']
+text_model = config['gemini']['text_model']
+image_model = config['gemini']['image_model']
+image_aspect_ratio = config['gemini']['image_aspect_ratio']
+image_size = config['gemini']['image_size']
+tts_model = config['gemini']['tts_model']
+tts_voices = config['gemini']['tts_voices']
 system_message_template = config['prompt']['system_message']
 image_prompt_template = config['prompt']['image_prompt']
 json_schema = config['schema']
-
-# Initialize OpenAI API key
-client = OpenAI(api_key=api_key)
-openai.api_key = api_key
 
 def read_grammar(grammar_file, lecture_number):
     """Read the grammar content for a specific lecture from grammar.md.
@@ -88,38 +90,38 @@ def get_translation_and_example(word, source_language, proficiency_level, gramma
     """Generate translation and example sentences for a given word."""
     # Read grammar for specific lecture
     grammar = read_grammar(grammar_file, lecture_number)
-    
-    # Construct the complete prompt with system message at the end
-    complete_prompt = f"<Grammar>\n{grammar}\n</Grammar>\n\n{system_message_template}"
 
-    # Format the prompt with the provided parameters
+    # Construct the complete prompt with system message
+    complete_prompt = f"<Grammar>\n{grammar}\n</Grammar>\n\n{system_message_template}"
     system_message = complete_prompt.format(source_language=source_language, proficiency_level=proficiency_level, lecture_number=lecture_number)
-    response = client.chat.completions.create(
-        model=text_model,
-        messages=[
-            {
-                "role": "system",
-                "content": system_message
-            },
-            {
-                "role": "user",
-                "content": word
-            }
-        ],
-        functions=[
-            {
-                "name": "generate_word_profile",
-                "description": "Generates a word profile with translations and examples.",
-                "parameters": json_schema
-            }
-        ],
-        function_call={"name": "generate_word_profile"}
+    prompt = f"{system_message}\n\nWord: {word}"
+
+    # Define function declaration
+    function = types.FunctionDeclaration(
+        name='generate_word_profile',
+        description='Generates a word profile with translations and examples.',
+        parameters_json_schema=json_schema
     )
 
-    # Parse the structured output
-    word_profile_arguments = response.choices[0].message.function_call.arguments
-    word_profile = json.loads(word_profile_arguments)
+    # Create tool with function declaration
+    tool = types.Tool(function_declarations=[function])
+
+    # Generate content with function calling
+    response = client.models.generate_content(
+        model=text_model,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            tools=[tool],
+            temperature=0.7
+        )
+    )
+
+    # Extract function call response
+    function_call = response.candidates[0].content.parts[0].function_call
+    word_profile = dict(function_call.args)
+
     logging.info(word_profile)
+
     # Add lecture and ubung to the word profile
     word_profile['lecture'] = lecture_number
     word_profile['ubung'] = ubung
@@ -131,13 +133,15 @@ def get_translation_and_example(word, source_language, proficiency_level, gramma
     logging.info(f"Word profile saved as {file_path}")
 
     # Extract and log token usage information
-    logging.info(f"Prompt tokens: {response.usage.prompt_tokens}")
-    logging.info(f"Completion tokens: {response.usage.completion_tokens}")
-    logging.info(f"Total tokens: {response.usage.total_tokens}")
+    if hasattr(response, 'usage_metadata'):
+        usage = response.usage_metadata
+        logging.info(f"Prompt tokens: {usage.prompt_token_count}")
+        logging.info(f"Completion tokens: {usage.candidates_token_count}")
+        logging.info(f"Total tokens: {usage.total_token_count}")
 
     # Calculate and log cost information
-    input_text = system_message + word
-    output_text = word_profile_arguments
+    input_text = prompt
+    output_text = json.dumps(word_profile)
     cost_info = calculate_cost(input_text, output_text, text_model)
     logging.info(f"API Call Cost Information: {json.dumps(cost_info, indent=2)}")
 
@@ -145,76 +149,136 @@ def get_translation_and_example(word, source_language, proficiency_level, gramma
 
 def generate_image_from_profile(word_profile):
     """
-    Generate an image based on the word profile.
-    This function creates an image based on the provided word profile by generating an image prompt,
-    retrieving the generated image, resizing it, and saving it to a specified directory.
+    Generate an image based on the word profile using Gemini native image generation.
     Args:
-        word_profile (dict): A dictionary containing the word profile information. It should include
-                             a key 'german_word' which will be used to name the saved image file.
+        word_profile (dict): A dictionary containing the word profile information.
     Returns:
         None
     """
     # Format the image prompt with the word profile data
     image_prompt = image_prompt_template.format(german_word=word_profile['original_word'])
 
-    image_response = client.images.generate(
+    # Generate image with specified config
+    response = client.models.generate_content(
         model=image_model,
-        prompt=image_prompt,
-        n=1,
-        size=image_size,
+        contents=image_prompt,
+        config=types.GenerateContentConfig(
+            response_modalities=["IMAGE"]
+        )
     )
-    # Retrieve and download the image
-    image_url = image_response.data[0].url
-    image_data = requests.get(image_url).content
 
-    temp_image_path = os.path.join(files_dir, "temp_image.jpg")
-    with open(temp_image_path, 'wb') as temp_image_file:
-        temp_image_file.write(image_data)
+    # Extract image data from response
+    image_part = response.candidates[0].content.parts[0]
 
-    # Open, resize, and save the image
-    with Image.open(temp_image_path) as img:
-        resized_img = img.resize((256, 256))
-        resized_image_filename = os.path.join(files_dir, f"{word_profile['german_word']}_image.jpg")
-        resized_img.save(resized_image_filename)
-    logging.info(f"Resized image saved as {resized_image_filename}")
-    # Remove the temporary file
-    os.remove(temp_image_path)
+    if hasattr(image_part, 'inline_data'):
+        # Get image data
+        image_data = image_part.inline_data.data
+
+        # Save as temporary file
+        temp_image_path = os.path.join(files_dir, "temp_image.jpg")
+        with open(temp_image_path, 'wb') as temp_image_file:
+            temp_image_file.write(image_data)
+
+        # Open, resize, and save the image
+        with Image.open(temp_image_path) as img:
+            resized_img = img.resize((256, 256))
+            resized_image_filename = os.path.join(files_dir, f"{word_profile['german_word']}_image.jpg")
+            resized_img.save(resized_image_filename)
+        logging.info(f"Resized image saved as {resized_image_filename}")
+
+        # Remove the temporary file
+        os.remove(temp_image_path)
+    else:
+        logging.error("No image data found in response")
 
 def generate_tts_from_profile(word_profile):
-    """Generate TTS audio files for the word and example sentences.
+    """Generate TTS audio files for the word and example sentences using Gemini TTS.
 
     Args:
-        word_profile (dict): A dictionary containing the word profile information. It should include
-                             a key 'german_word' and a list of 'examples' with 'german_example' sentences.
+        word_profile (dict): A dictionary containing the word profile information.
 
     Returns:
         None
     """
-    voice = random.choice(["alloy", "echo", "fable", "onyx", "nova", "shimmer"])
+    # Randomly select a voice from configured voices
+    voice = random.choice(tts_voices)
 
     # Generate TTS for the main German word
     main_word = word_profile['german_word']
 
-    def save_tts_audio(input_text, file_path, voice):
-        """Helper to generate and save TTS audio.
+    def save_tts_audio(input_text, file_path, voice_name):
+        """Helper to generate and save TTS audio using Gemini.
 
         Args:
             input_text (str): The text to convert to speech.
             file_path (str): The path to save the audio file.
-            voice (str): The voice to use for TTS.
+            voice_name (str): The Gemini voice to use for TTS.
 
         Returns:
             None
         """
-        tts_response = openai.audio.speech.create(
+        # Generate audio with voice config
+        response = client.models.generate_content(
             model=tts_model,
-            input=input_text,
-            voice=voice
+            contents=input_text,
+            config=types.GenerateContentConfig(
+                response_modalities=["AUDIO"],
+                speech_config=types.SpeechConfig(
+                    voice_config=types.VoiceConfig(
+                        prebuilt_voice_config=types.PrebuiltVoiceConfig(
+                            voice_name=voice_name
+                        )
+                    )
+                )
+            )
         )
-        tts_response.stream_to_file(file_path)
-        logging.info(f"Audio saved as {file_path}")
-    # Use in generate_tts_from_profile
-    # save_tts_audio(main_word, os.path.join(files_dir, f"{main_word}_word.mp3"), voice)
+
+        # Extract audio data from response
+        if not response.candidates or not response.candidates[0].content:
+            logging.error(f"No valid response received for TTS: {input_text}")
+            return
+
+        audio_part = response.candidates[0].content.parts[0]
+
+        if hasattr(audio_part, 'inline_data'):
+            # Gemini TTS returns base64-encoded PCM audio (24kHz, 16-bit, mono)
+            audio_base64 = audio_part.inline_data.data
+
+            # Decode base64 to raw PCM bytes
+            if isinstance(audio_base64, str):
+                pcm_data = base64.b64decode(audio_base64)
+            else:
+                # Already bytes
+                pcm_data = audio_base64
+
+            # Convert PCM to WAV format
+            # Gemini TTS format: 24kHz sample rate, 16-bit, 1 channel (mono)
+            wav_path = file_path.replace('.mp3', '.wav')
+            with wave.open(wav_path, 'wb') as wav_file:
+                wav_file.setnchannels(1)  # Mono
+                wav_file.setsampwidth(2)  # 16-bit = 2 bytes
+                wav_file.setframerate(24000)  # 24kHz
+                wav_file.writeframes(pcm_data)
+
+            logging.info(f"Audio saved as {wav_path}")
+        else:
+            logging.error(f"No audio data found in response for {input_text}")
+
+    # Generate TTS for the word itself (optional - skip on error)
+    logging.info("Generating word audio...")
+    try:
+        # Add context to single words to help TTS API (some models struggle with single words)
+        word_text = main_word if len(main_word.split()) > 1 else f"Das Wort ist {main_word}."
+        save_tts_audio(
+            word_text,
+            os.path.join(files_dir, f"{main_word}_word.mp3"),
+            voice
+        )
+        # Rate limiting: 10 requests/minute = 1 request per 6 seconds
+        # Adding 7 seconds to be safe
+        time.sleep(7)
+    except Exception as e:
+        logging.warning(f"Skipping word audio due to error: {e}")
 
     # Generate TTS for each example sentence
     for index, example in enumerate(word_profile['examples']):
@@ -223,3 +287,6 @@ def generate_tts_from_profile(word_profile):
             os.path.join(files_dir, f"{main_word}_example_{index + 1}.mp3"),
             voice
         )
+        # Rate limiting delay between each TTS request
+        if index < len(word_profile['examples']) - 1:  # Don't sleep after last one
+            time.sleep(7)

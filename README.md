@@ -1,170 +1,186 @@
-# AI Anki Card Generator
+# Anki Assist AI
 
-Generate Anki flashcards from any source language to German using AnkiConnect and OpenAI. This tool creates custom cards with translations, grammar information, examples, images, and audio. It is easily adaptable to other languages as well.
-
-![AI Anki Card Generator](assets/gifs/demo.gif)
-
-<p align="left">
-   <img src="assets/screenshots/image.png" alt="Picture 1" width="150"/>
-   <img src="assets/screenshots/image3.png" alt="Picture 4" width="150"/>
-   <img src="assets/screenshots/image1.png" alt="Picture 2" width="150"/>
-   <img src="assets/screenshots/image2.png" alt="Picture 3" width="150"/>
-</p>
-
-## Table of Contents
-
-1. [Features](#features)
-2. [Installation](#installation)
-3. [Configuration](#configuration)
-4. [Usage](#usage)
-   - [Running the Streamlit App](#running-the-streamlit-app)
-   - [Using the Command Line](#using-the-command-line)
-5. [Project Structure](#project-structure)
-6. [Dependencies](#dependencies)
-7. [Costs](#costs)
-8. [License](#license)
+Automated Anki flashcard generator for German learning using Google Gemini. Generates translations, grammar info, example sentences with lecture-specific grammar, images, and audio.
 
 ## Features
 
-- **Automatic Translation and Grammatical Analysis**: Translates words between German and various source languages, adding detailed grammatical information.
-- **Audio and Image Generation**: Utilizes OpenAI's TTS and image models to generate audio pronunciation files and relevant images.
-- **Example Sentences**: Creates three example sentences at the chosen proficiency level (A1 to C2) in both German and the source language for effective vocabulary learning.
-- **Multiple Source Languages**: Supports any source language supported by OpenAI, including English, Farsi, Spanish, French, German, Italian, Japanese, Korean, Portuguese, Russian, Chinese, Turkish, Arabic, and Hindi.
-- **Customizable Proficiency Levels**: Allows selection of proficiency levels from A1 to C2 to tailor the complexity of generated examples.
-- **Custom Anki Model**: Automatically sets up and uses a custom Anki model to format and display generated content.
-- **User-Friendly Streamlit Interface**: Provides an interactive web-based interface for easy input and visualization.
-- **Command-Line Interface**: Offers a CLI for users who prefer terminal-based interaction.
-- **Duplicate Card Handling**: Automatically detects and overwrites duplicate Anki cards.
-- **Integrated File Management**: Automatically organizes and saves generated media files (images, audio, profiles).
+- **Batch Processing** with auto-resume (skips completed words)
+- **Grammar-Aware**: Uses lecture-specific grammar rules for examples
+- **AI Generation**: Gemini 2.5 Flash (text), Nano Banana (images), Gemini TTS (audio)
+- **Multi-Language**: 14+ source languages
+- **Cost**: ~$0.08/word (~$83 for 1,042 words, ~13 hours with free tier)
 
-## Installation
+## Quick Start
 
-1. **Clone the Repository**:
+```bash
+# 1. Install
+git clone https://github.com/your-username/anki_assist_ai.git
+cd anki_assist_ai
+curl -sSL https://install.python-poetry.org | python3 -
+poetry install
 
-   ```bash
-   git clone https://github.com/your-username/ai_anki_card_generator.git
-   cd ai_anki_card_generator
-   ```
+# 2. Setup
+cp .env.template .env
+# Add GOOGLE_AI_API_KEY to .env
 
-2. **Install Poetry** (if you haven’t already):
+# 3. Install AnkiConnect
+# Anki → Tools → Add-ons → Get Add-ons → Code: 2055492159
 
-   ```bash
-   curl -sSL https://install.python-poetry.org | python3 -
-   ```
-3. **Set the Correct Python Version**: 
+# 4. Create Anki deck (e.g., "Netzwerk neu B1.1")
 
-   ```bash
-   python get_python_version.py | xargs poetry env use
-   ```
-4. **Install Dependencies**:
+# 5. Create folder for your level
+mkdir -p b1.1
 
-   ```bash
-   poetry install
-   ```
+# 6. Create grammar file: b1.1/grammer.md
+cat > b1.1/grammer.md << 'EOF'
+### Lektion 1
+- Weil-Sätze (because clauses)
+- Perfekt tense
+- Modal verbs
+EOF
 
-5. **Set Up Environment Variables**:
+# 7. Create word list: b1.1/word_list.csv
+cat > b1.1/word_list.csv << 'EOF'
+word;lecture;exercise
+faulenzen;1;1a
+lernen;1;1b
+EOF
 
-   - Create a `.env` file in the project root directory.
-   - Add your OpenAI API key in the following format:
-     ```plaintext
-     OPENAI_API_KEY=your_openai_api_key
-     ```
+# 8. Configure main.py
+# Update: proficiency_level, grammar_file, csv_file, deck_name
 
-5. **Configure AnkiConnect**:
+# 9. Test with 1 word first
+# Edit main.py: df = df.head(1)
+poetry run python anki_assist_ai/main.py
 
-   - Install [AnkiConnect](https://foosoft.net/projects/anki-connect/) by following the instructions provided on the website. Here is a summary:
+# 10. Run full batch (prevents sleep)
+caffeinate -s poetry run python anki_assist_ai/main.py
 
-     1. Open the Install Add-on dialog by selecting **Tools | Add-ons | Get Add-ons**... in Anki.
-     2. Input `2055492159` into the text box labeled **Code** and press the **OK** button to proceed.
-     3. Restart Anki when prompted to complete the installation of Anki-Connect.
-
-   - Anki must be kept running in the background for other applications to use Anki-Connect. You can verify that Anki-Connect is running at any time by accessing `localhost:8765` in your browser. If the server is running, you will see the message "Anki-Connect" displayed in your browser window.
+# Check progress anytime
+poetry run python utils/check_progress.py
+```
 
 ## Configuration
 
-The configuration file `config.yml` controls the generation and processing parameters for the project. Key sections include:
+**config.yml:**
+```yaml
+gemini:
+  text_model: "gemini-2.5-flash"
+  image_model: "gemini-2.5-flash-image"  # Nano Banana
+  tts_model: "gemini-2.5-flash-preview-tts"
 
-- **Languages**: Defines supported source languages and proficiency levels.
-- **Prompt**: Contains the system message template guiding OpenAI's language model for translations and example generation.
-- **Schema**: Specifies the JSON schema for the structured data returned by OpenAI.
-- **Files**: Directory to store generated files like images and audio.
-- **Anki**: Settings for the Anki deck, model, and card templates.
-- **OpenAI Models**: Configuration for OpenAI text, image, and TTS (text-to-speech) models.
-
-Modify the `config.yml` file as needed to fine-tune the project’s output.
-
-## Usage
-
-### Running the Streamlit App
-
-To start the Streamlit app, use the following command:
-
-```bash
-poetry run streamlit run ai_anki_card_generator/app.py
+anki:
+  deck_name: "Netzwerk neu B1.1"  # Must match your Anki deck
+  connect_url: "http://localhost:8765"
 ```
 
-The app provides a user-friendly interface with a two-column layout:
-
-- **Left Column**:
-
-  - **Generate Image**: Checkbox to generate an image.
-  - **Generate Audio**: Checkbox to generate audio files.
-  - **Select Source Language**: Choose from supported languages.
-  - **Select Proficiency Level**: Choose from A1 to C2.
-  - **Input Word**: Enter a German or source language word.
-  - **Generate Button**: Starts the generation process.
-
-- **Right Column**:
-
-  - Displays generated images and audio files (if requested).
-
-Once generated, the Anki card is automatically added to your specified deck.
-
-### Using the Command Line
-
-To run the program via the command line, use:
-
-```bash
-poetry run python ai_anki_card_generator/main.py
+**main.py:**
+```python
+source_language = "English"
+proficiency_level = "B1.1"
+grammar_file = "b1.1/grammer.md"
+csv_file = "b1.1/word_list.csv"
+generate_image = True
+generate_tts = True
+add_to_anki = True
 ```
 
-- You will be prompted to enter a word, source language, and proficiency level.
-- The program will generate the corresponding Anki card, handling duplicate entries by overwriting existing cards with the same German word.
+## How It Works
+
+1. **Input**: CSV with word, lecture, exercise
+2. **Grammar**: Extracts lecture-specific grammar from markdown
+3. **AI Generation**:
+   - Text: Translation + 3 examples using lecture grammar
+   - Image: Visual mnemonic (1024x1024 → 256x256)
+   - Audio: Word + 3 example WAV files (7-sec delays for rate limiting)
+4. **Output**: JSON profiles + media files → Anki cards
+
+**Example:** For word "faulenzen" in Lecture 1:
+- Grammar: `Weil-Sätze, Perfekt tense`
+- Generated: "Ich habe keine Lust zu faulenzen, **weil** ich etwas erleben möchte."
+- Result: Vocabulary reinforces grammar! ✨
+
+## Generated Files
+
+```
+files/
+├── faulenzen_profile.json       # Word data
+├── faulenzen_image.jpg          # Visual mnemonic
+├── faulenzen_word.wav           # Word audio
+├── faulenzen_example_1.wav      # Example 1 audio
+├── faulenzen_example_2.wav      # Example 2 audio
+└── faulenzen_example_3.wav      # Example 3 audio
+```
+
+## Progress Tracking
+
+```bash
+# Check status
+poetry run python utils/check_progress.py
+
+# Output shows complete/incomplete words
+# Script auto-skips completed words on resume
+```
+
+## Rate Limits & Costs (Free Tier)
+
+| Model | Limit | Cost/Word | Bottleneck |
+|-------|-------|-----------|------------|
+| Text (2.5 Flash) | 15 RPM | $0.0007 | No |
+| Image (Nano Banana) | - | $0.039 | No |
+| TTS (2.5 Flash) | **10 RPM** | $0.04 | **Yes** |
+
+**Total**: ~$0.08/word, ~45 sec/word (due to TTS rate limiting)
+
+**For 1,042 words**: ~$83, ~13 hours
+
+**Upgrade**: Enable Cloud Billing for faster processing (same cost, higher limits)
 
 ## Project Structure
 
-```plaintext
+```
 .
-├── ai_anki_card_generator           # Main project directory
-│   ├── __init__.py
-│   ├── app.py                       # Streamlit app
-│   └── main.py                      # Command-line entry point
-├── utils                            # Utility functions
-│   ├── anki_utils.py                # AnkiConnect functions
-│   ├── example_generator.py         # Word profile generation, images, and audio
-├── config.yml                       # Configuration file
-├── .env                             # Environment variables (API key)
-├── README.md                        # Project documentation
-├── pyproject.toml                   # Poetry dependencies
-├── .gitignore                       # Ignored files
+├── anki_assist_ai/
+│   ├── main.py              # Main script
+│   └── postprocess.py       # Quality checks
+├── utils/
+│   ├── anki_utils.py        # AnkiConnect API
+│   ├── example_generator.py # Gemini generation
+│   ├── cost_calculator.py   # Cost tracking
+│   └── check_progress.py    # Progress checker
+├── config.yml               # Configuration
+├── .env                     # API key
+└── files/                   # Generated outputs
+```
+
+## Tips
+
+**Prevent laptop sleep:**
+```bash
+caffeinate -s poetry run python anki_assist_ai/main.py
+```
+
+**Run in background:**
+```bash
+nohup poetry run python anki_assist_ai/main.py > output.log 2>&1 &
+tail -f output.log
+```
+
+**Resume after crash:**
+Just run again - auto-skips completed words!
+
+**Quality checks:**
+```bash
+poetry run python anki_assist_ai/postprocess.py
 ```
 
 ## Dependencies
 
-- **Python** 3.10 or later
-- **Poetry** for package management
-- **OpenAI API** for language, image, and audio generation
-- **Pillow** for image processing
-- **requests** for HTTP requests (AnkiConnect)
-- **PyYAML** for YAML configuration handling
-- **python-dotenv** to load environment variables
-- **Streamlit** for the web-based interface
-
-## Costs
-
-TODO
+- Python 3.10+
+- Poetry
+- Google AI API key
+- Anki + AnkiConnect
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
-
+MIT License

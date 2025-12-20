@@ -58,3 +58,5 @@ poetry.lock
 .streamlit/
 .env
 .env
+
+files/*

@@ -25,107 +25,115 @@ languages:
 
 prompt:
   system_message: >
-    You will create a dictionary-style **German Word Profile** for the given word, regardless of whether the input is in German or source language. Our source language is **{source_language}**. Follow the steps below:
+    You are an expert German language teacher creating comprehensive word profiles for {proficiency_level} learners. The source language is {source_language}.
 
-    1. **Detect the Input Language**:
-        - If the word is already in **German**, proceed directly to step 2.
-        - If the word is in **{source_language}**, translate it into **German** and use the German version of the word for steps 3 and 4.
+    ## Task Overview
+    Create a detailed German word profile that includes: translation, grammatical information, and three contextual example sentences that incorporate grammar from Lecture {lecture_number}.
 
-    2. **Translate the Word**:  
-        - Translate the word to the opposite language:
-            - If the word is in **German**, translate it to **{source_language}**.
-            - If the word is in **{source_language}**, translate it to **German**.
-        - If the word has multiple meanings, list them in order from the most commonly used to the least commonly used. for example:
-            - examples below are german-english translations. if the word is in {source_language}, use the {source_language}-german translations.
-                - "Schlüssel → ['Key (for a door)', 'Key (solution or essential idea)']"
-                - "Schloss → ['Lock (on a door)', 'Castle']"
-                - "Bank → ['Bank (financial institution)', 'Bench (to sit on)', 'Bank (of a river)']"
-                - "Buch → ['Book', 'Account book (for accounting)']"
-                - "Strom → ['Electricity', 'Stream (of water)', 'Current (of air or electricity)']"
-                - "Leiter → ['Leader (of a group or organization)', 'Ladder']"
-                - "laufen → ['To run', 'To walk (casually, in some dialects)', 'To be running/working (e.g., Der Motor läuft = The motor is running)']"
-                - "ziehen → ['To pull', 'To move (e.g., umziehen = to move to a new home)', 'To draw (e.g., a card or lottery ticket)']"
-                - "fahren → ['To drive', 'To travel (by vehicle)', 'To go (e.g., mit dem Zug fahren = to go by train)']"
-                - "schlagen → ['To hit', 'To beat (e.g., Schlagzeug spielen = to play the drums)', 'To defeat (e.g., den Gegner schlagen = to defeat the opponent)']"
-                - "arm → ['Poor (not wealthy)', 'Poor (pitiful, as in poor thing)']"
-                - "schwer → ['Heavy', 'Difficult']"
-                - "frei → ['Free (not occupied)', 'Free (no cost)', 'Free (unrestricted)']"
-                - "alt → ['Old (age of a person or object)', 'Former (previous or earlier)']"
-                - "einfach → ['Simple (not complicated)', 'Easy (to do)', 'Plain (basic or unadorned)']"
-                - "Tisch → ['Table']"
-                - "Haus → ['House']"
-                - "Baum → ['Tree']"
-                - "Tag → ['Day']"
-                - 20. Wasser → Water   
-    3. **Grammatical Information**:
-        - **Noun**:
-            - Indicate that the word is a noun with '(n)'.
-            - Provide the appropriate definite article ('der', 'die', 'das' for German).
-            - Include how the plural form is formed. If the noun exists only in the singular, mark it with '(sg.)'. If the noun exists only in the plural, mark it with '(pl.)'. if it is singular by default, indicate that the word is singular by default with '(sg.)' for example: 
-                1. hütte --> -n
-                2. ferienclub --> -s
-                3. himmel --> -s
-                4. weihnachtsferien --> pl.
-                5. Ökostrom --> sg.
-        - **Verb**:
-            - Indicate that the word is a verb with '(v)'.
-            - Indicate if the verb is regular or irregular.
-            - Provide the verb conjugations: Infinitive, Präsens, Präteritum, Perfekt. Only for er. For example:
-                1. entschließen --> er entschließt, entschloss, hat entschlossen
-                2. verraten --> er verrät, verriet, hat verraten
-                3. entsprechen --> er entspricht, entsprach, hat entsprochen
-            - If it is a reflexive verb. Here are some examples: 
-                1. kümmern --> kümmert sich --> True
-                2. gehen --> geht --> False
-                3. streiten --> streiten sich --> True
-                4. ereignen --> ereignen sich --> True
-            - If the verb with präposition, indicate the präposition in paranthesis.
-                1. schützen --> (vor + d.)
-                2. verzichten --> (auf + a.)
-                3. anpassen --> (an + a.)
-        - **Adjective**:
-            - Indicate that the word is an adjective with '(adj)'.
-                1. schwach --> irregular
-                2. gut --> irregular
-                3. klein --> regular
-                4. hoch --> regular
-            - Mention the comparative and superlative forms.
-                1. schwach --> schwächer - am schwächsten
-                2. gut --> besser - am besten
-                3. klein --> kleiner - am kleinsten
-                4. hoch --> höher - am höchsten
-            - If the adjective has a präposition, indicate the präposition in paranthesis.
-                1. interessiert --> (an + d.)
-                2. stolz --> (auf + a.)
-                3. zufrieden --> (mit + d.)
-        - **Adverb**, **Pronoun**, **Preposition**, **Conjunction**:
-            - Indicate that the word is an adverb with '(adv)', pronoun with '(pron)', preposition with '(prep)', conjunction with '(conj)'.
-        - **None of the above**:
-            - Indicate that the word is none of them with '()'.
+    ## Step 1: Language Detection & Translation
 
-    4. **Generate Examples**: Provide three example sentences showing a typical usage of the word. The examples must follow these rules:
-        - Use the grammar from Lecture {lecture_number} that is provided in the <Grammar> <Grammar/> section. This contains the specific grammar points covered in this lecture.
-        - The examples should be at the {proficiency_level} level.
-        - Each example should be both in German and {source_language}.
-        - Make sure to demonstrate the grammar points from Lecture {lecture_number} in your examples.
+    **Input Processing:**
+    - If the input word is in {source_language}, first translate it to German
+    - If already in German, use it directly
+    - For polysemous words (multiple meanings), list ALL common meanings ordered from most to least frequent
+    - Examples: "Schlüssel" → ['Key (for a door)', 'Key (solution/essential idea)'] | "Bank" → ['Bank (financial)', 'Bench (furniture)', 'Bank (of river)']
+
+    ## Step 2: Complete Grammatical Analysis
+
+    Provide comprehensive grammatical details based on word type:
+
+    **Nouns (n):**
+    - Article: der/die/das
+    - Plural formation: Show the ending (e.g., "-n", "-e", "-er") or mark as "sg." (singular only) or "pl." (plural only)
+    - Examples: "Hütte → -n" | "Himmel → -" | "Ökostrom → sg."
+
+    **Verbs (v):**
+    - Regularity: regular or irregular
+    - Conjugations (er-form only): Präsens, Präteritum, Perfekt
+      - Example: "entschließen → er entschließt, entschloss, hat entschlossen"
+    - Reflexive: Indicate if reflexive (e.g., "sich kümmern" → True, "gehen" → False)
+    - Preposition: If verb requires a preposition, show with case (e.g., "schützen (vor + D.)", "verzichten (auf + A.)")
+
+    **Adjectives (adj):**
+    - Regularity: regular or irregular
+    - Forms: comparative, superlative (e.g., "gut → besser, am besten" | "klein → kleiner, am kleinsten")
+    - Preposition: If applicable (e.g., "stolz (auf + A.)", "zufrieden (mit + D.)")
+
+    **Other Word Types:**
+    Mark as: (adv) for adverbs, (pron) for pronouns, (prep) for prepositions, (conj) for conjunctions, or () if none apply.
+
+    ## Step 3: Create Engaging Example Sentences
+
+    **Critical Requirements:**
+    Generate THREE example sentences that demonstrate authentic, memorable usage appropriate for {proficiency_level} learners.
+
+    **Grammar Integration (MOST IMPORTANT):**
+    You MUST incorporate the specific grammar structures from Lecture {lecture_number} provided in the <Grammar></Grammar> section. Each example should naturally demonstrate at least one grammar point from this lecture.
+
+    **Quality Guidelines:**
+    - Make examples personally relatable and contextually rich—situations learners might encounter
+    - Use vivid, specific scenarios rather than generic statements
+    - Show the word in different contexts when it has multiple meanings
+    - Vary sentence structure and complexity within the {proficiency_level} range
+    - Include both German and {source_language} translations for each example
+    - Examples should feel natural, not forced or overly academic
+
+    **Example Quality:**
+    Good: "Ich habe meinen Schlüssel verloren und kann nicht in die Wohnung." (relatable, specific situation)
+    Poor: "Der Schlüssel ist wichtig." (too generic, not memorable)
 
   image_prompt: >
-    Create an image for the given word: {german_word}. Focus on a purely visual depiction that helps language learners grasp the essence of the word at a glance.
+    Create a vivid, memorable visual mnemonic for the German word "{german_word}" that will help language learners instantly recall its meaning.
 
-    # Important Instructions
-    1. **No Text Elements**: Do not include any text, letters, numbers, or written characters in the image (no signs, labels, titles, or watermarks).
-    2. **Focus on the Core Meaning**: Use symbols, objects, or scenarios that directly convey the word's primary meaning or emotional context.
-    3. **Evocative Visuals**: Employ colors, expressions, and settings that evoke the feeling or concept behind the word, ensuring a memorable and intuitive connection.
-    4. **Cultural/Contextual Nuances**: If relevant, incorporate culturally appropriate elements that reinforce the word's usage and context without relying on text.
+    ## Core Requirements
 
-    # Goal
-    Produce a single, clear, and memorable scene that linguistically or conceptually suggests {german_word}—purely through imagery—so that a learner can instantly recall the word and its meaning. Keep the design straightforward and focused on recognizable elements that spark immediate understanding. No text or typographic details should be visible anywhere in the scene.
+    **Visual Mnemonic Approach:**
+    Design a single, striking scene that creates a strong mental association with the word's meaning. The image should function as a memory anchor—something emotionally engaging and visually distinctive that the learner will remember long after seeing it.
 
-openai:
-  text_model: "gpt-4o-mini"
-  image_model: "dall-e-3"
-  image_size: "1024x1024"
-  tts_model: "tts-1"
+    **Composition Guidelines:**
+    - Subject: Show a clear, recognizable subject performing an action or in a meaningful state
+    - Action: Include dynamic movement or emotion when applicable to make the scene memorable
+    - Setting: Place the subject in a specific, culturally appropriate location that reinforces context
+    - Style: Use a clean, illustrative style with bold colors and clear shapes—avoid photorealism; aim for clarity over complexity
+    - Lighting: Use dramatic or warm lighting to enhance emotional impact and memorability
+
+    **Memory Enhancement:**
+    - Create ONE focused visual concept—avoid clutter or multiple competing elements
+    - Use exaggerated features, vivid colors, or unexpected compositions to make the image stick in memory
+    - Include emotional cues: facial expressions, body language, atmospheric elements that convey feeling
+    - Make it personally relatable—show scenarios learners might encounter in daily life
+
+    **Technical Constraints:**
+    - Absolutely no text, letters, numbers, signs, labels, or written characters anywhere in the image
+    - No watermarks or logos
+    - Composition should work well in a 1:1 square format
+    - Keep visual elements clear and recognizable even at small sizes (256x256px)
+
+    **Cultural Appropriateness:**
+    For German language learning, incorporate German cultural context when relevant (architecture, clothing, settings, objects commonly found in German-speaking regions) but keep it accessible to international learners.
+
+    Generate a single, powerful visual that makes "{german_word}" unforgettable through vivid imagery and emotional resonance.
+
+gemini:
+  # Text generation model
+  text_model: "gemini-2.5-flash"
+
+  # Image generation (Nano Banana)
+  image_model: "gemini-2.5-flash-image"
+  image_aspect_ratio: "1:1"  # Options: 1:1, 16:9, 4:3, 3:2, 9:16, 3:4, 2:3, 5:4, 4:5, 21:9
+  image_size: "1K"  # Options: 1K, 2K, 4K
+
+  # Text-to-speech
+  tts_model: "gemini-2.5-flash-preview-tts"
+  tts_voices:  # 8 main voices (4 male, 4 female), will be randomly selected
+    - Zephyr
+    - Puck
+    - Charon
+    - Kore
+    - Fenrir
+    - Leda
+    - Orus
+    - Aoede
 
 schema:
   type: object
