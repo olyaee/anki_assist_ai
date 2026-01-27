@@ -71,6 +71,14 @@ def normalize_word(word):
     return word.split(',')[0].strip().capitalize()
 
 
+def sanitize_filename(name):
+    """Remove/replace characters invalid in file paths."""
+    # Replace / and \ with hyphen, remove other problematic chars
+    for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|']:
+        name = name.replace(char, '-')
+    return name
+
+
 def update_csv_timestamp(csv_path, word, column):
     """Update timestamp in CSV."""
     try:
@@ -158,14 +166,19 @@ def generate_image(word_profile):
     """Generate image from profile."""
     try:
         word = word_profile['german_word']
-        normalized = normalize_word(word)
+        normalized = sanitize_filename(normalize_word(word))
         image_path = files_dir / f"{normalized}_image.jpg"
 
         if image_path.exists():
             return True
 
+        # Randomly select an image style for variety
+        image_style = random.choice(config['prompt']['image_styles'])
+        logging.info(f"  Style: {image_style.split(':')[0]}")
+
         prompt = config['prompt']['image_prompt'].format(
-            german_word=word_profile.get('original_word', word)
+            german_word=word_profile.get('original_word', word),
+            image_style=image_style
         )
 
         response = client.models.generate_content(
@@ -221,7 +234,7 @@ def generate_tts(word_profile):
     """Generate TTS audio for 3 examples."""
     try:
         word = word_profile['german_word']
-        normalized = normalize_word(word)
+        normalized = sanitize_filename(normalize_word(word))
 
         example_1 = files_dir / f"{normalized}_example_1.wav"
         if example_1.exists():
@@ -342,7 +355,7 @@ def sync_to_anki(word_profile):
         deck_name = config['anki']['deck_name']
         model_name = config['anki']['model_name']
         word = word_profile['german_word']
-        normalized = normalize_word(word)
+        normalized = sanitize_filename(normalize_word(word))
 
         # Store media
         audio_examples = [

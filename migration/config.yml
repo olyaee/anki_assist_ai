@@ -83,49 +83,42 @@ prompt:
     Poor: "Der Schlüssel ist wichtig." (too generic, not memorable)
 
   image_prompt: >
-    Create a unique, memorable visual mnemonic for the German word "{german_word}" that will help language learners instantly recall its meaning.
+    Create a memorable visual mnemonic for the German word "{german_word}" that helps language learners instantly recall its meaning.
 
-    ## Core Principle: WORD-SPECIFIC IMAGERY FIRST
+    ## MANDATORY STYLE: {image_style}
 
-    **Focus on the word's actual meaning, NOT generic German stereotypes.** Each image must be visually distinct and directly represent the word itself.
+    You MUST render this image in the specified style above. This is non-negotiable.
 
-    **Visual Mnemonic Strategy:**
-    - Analyze the word's specific meaning and create imagery that directly illustrates it
-    - Design a single, striking scene unique to THIS word—not a generic cultural template
+    ## Core Requirements:
+    - Focus on the word's actual meaning—create imagery that directly illustrates "{german_word}"
+    - Design a single, striking scene unique to THIS word
     - Make it emotionally engaging and visually distinctive
-    - Avoid repetitive elements: no default pretzels, beer, lederhosen, or half-timbered buildings unless the word specifically requires them
+    - Avoid generic German stereotypes (no default pretzels, beer, lederhosen unless the word specifically requires them)
 
-    **Diversity Requirements (CRITICAL):**
-    - **Vary visual style**: Alternate between modern/traditional, realistic/abstract, minimalist/detailed, warm/cool tones
-    - **Vary settings**: Urban/rural, indoor/outdoor, nature/architecture, day/night, different seasons
-    - **Vary perspectives**: Close-up/wide shot, bird's eye/ground level, symmetrical/asymmetric
-    - **Vary color palettes**: Each image should have a distinct color scheme (vibrant vs muted, warm vs cool, monochromatic vs colorful)
-    - **Vary subjects**: Different types of people (age, profession, activity), animals, objects, or abstract concepts depending on the word
+    ## Composition:
+    - ONE clear, recognizable element that embodies the word's meaning
+    - Dynamic movement or emotion when applicable
+    - Setting chosen based on the WORD, not cultural assumptions
 
-    **Composition Guidelines:**
-    - Subject: Clear, recognizable element that embodies the word's meaning
-    - Action: Dynamic movement or emotion when applicable
-    - Setting: Choose based on the WORD, not cultural assumptions
-    - Style: Clean illustration with bold colors—clarity over complexity
-    - Lighting: Varied and dramatic to enhance memorability
-
-    **Memory Enhancement:**
-    - ONE focused concept per image
-    - Use unexpected angles, exaggerated features, or surprising compositions
-    - Include emotional cues: expressions, body language, atmospheric elements
-    - Make each image feel different from previous ones
-
-    **Technical Constraints:**
+    ## Technical Constraints:
     - No text, letters, numbers, signs, or labels
     - No watermarks or logos
     - 1:1 square format, clear at 256x256px
 
-    **Examples of Good Variation:**
-    - "Himmel" (sky): Expansive sunset landscape with dramatic clouds (NOT German buildings)
-    - "Tisch" (table): Modern minimalist dining scene or cozy family dinner (NOT traditional Bavarian setting)
-    - "laufen" (run): Athletic person jogging in a park at dawn (NOT someone in dirndl)
+    Generate the image for "{german_word}" strictly in the {image_style} style.
 
-    Generate a visually unique image that makes "{german_word}" unforgettable through word-specific, diverse imagery.
+  # Diverse image styles - one is randomly selected per word
+  image_styles:
+    - "photorealistic style: hyper-realistic photograph with natural lighting, shallow depth of field, and lifelike details"
+    - "oil painting style: rich textured brushstrokes, classical composition, warm colors reminiscent of Dutch masters"
+    - "watercolor style: soft translucent washes, gentle color bleeding, dreamy atmospheric quality"
+    - "minimalist flat design: simple geometric shapes, solid colors, clean lines, modern graphic design aesthetic"
+    - "3D rendered style: smooth volumetric shapes, soft shadows, clay-like figures, Pixar-inspired look"
+    - "pencil sketch style: detailed graphite drawing with cross-hatching, realistic shading, hand-drawn feel"
+    - "pop art style: bold primary colors, halftone dots, high contrast, Andy Warhol inspired"
+    - "impressionist style: visible brushstrokes, vibrant light effects, Monet-inspired soft focus"
+    - "isometric illustration: 3D geometric perspective, clean lines, technical drawing aesthetic"
+    - "botanical illustration style: scientific accuracy, detailed naturalistic rendering, vintage field guide aesthetic"
 
 gemini:
   # Text generation model
