@@ -37,6 +37,7 @@ load_dotenv()
 # Globals
 config = None
 client = None
+clients = []  # Multiple clients for API key rotation
 files_dir = None
 
 
@@ -62,6 +63,15 @@ def load_config():
         sys.exit(1)
 
     client = genai.Client(api_key=api_key)
+
+    # Build list of TTS clients from all available API keys
+    api_keys = [api_key]
+    for i in range(2, 10):
+        extra = os.getenv(f'GOOGLE_AI_API_KEY_{i}')
+        if extra:
+            api_keys.append(extra)
+    for key in api_keys:
+        clients.append(genai.Client(api_key=key))
     files_dir = Path(config['files']['directory'])
     files_dir.mkdir(exist_ok=True)
 
@@ -230,16 +240,18 @@ def add_silence_to_audio(audio_path, duration_ms=1000):
         pass  # sox not installed or failed, skip silence
 
 
-def generate_tts(word_profile):
-    """Generate TTS audio for 3 examples."""
+def generate_tts(word_profile, tts_client=None, tts_model=None):
+    """Generate TTS audio for 3 examples. Returns 'ok', 'quota', or 'error'."""
     try:
         word = word_profile['german_word']
         normalized = sanitize_filename(normalize_word(word))
 
         example_1 = files_dir / f"{normalized}_example_1.wav"
         if example_1.exists():
-            return True
+            return 'ok'
 
+        use_client = tts_client or client
+        use_model = tts_model or config['gemini']['tts_models'][0]
         voice = random.choice(config['gemini']['tts_voices'])
         examples = word_profile.get('examples', [])
 
@@ -250,8 +262,8 @@ def generate_tts(word_profile):
 
             audio_path = files_dir / f"{normalized}_example_{idx+1}.wav"
 
-            response = client.models.generate_content(
-                model=config['gemini']['tts_model'],
+            response = use_client.models.generate_content(
+                model=use_model,
                 contents=text,
                 config=types.GenerateContentConfig(
                     response_modalities=["AUDIO"],
@@ -286,10 +298,14 @@ def generate_tts(word_profile):
             if idx < 2:
                 time.sleep(7)
 
-        return True
+        return 'ok'
     except Exception as e:
+        err_str = str(e)
+        if '429' in err_str or 'RESOURCE_EXHAUSTED' in err_str:
+            logging.warning(f"TTS quota hit on {use_model}: {e}")
+            return 'quota'
         logging.error(f"TTS generation failed: {e}")
-        return False
+        return 'error'
 
 
 def create_anki_model():
@@ -538,6 +554,18 @@ def main():
     df = pd.read_csv(args.csv, delimiter=';')
 
     tts_count = 0
+    tts_models = config['gemini']['tts_models']
+
+    # Build all (client, model) combos to rotate through
+    tts_combos = []
+    for c in clients:
+        for m in tts_models:
+            tts_combos.append((c, m))
+    logging.info(f"TTS rotation: {len(clients)} API key(s) x {len(tts_models)} model(s) = {len(tts_combos)} combos")
+
+    exhausted_combos = set()
+    combo_idx = 0
+
     for idx, row in df.iterrows():
         if pd.isna(row.get('profile_timestamp')):
             continue
@@ -556,13 +584,43 @@ def main():
 
         logging.info(f"TTS: {word}")
 
-        if generate_tts(word_profile):
+        # Try combos until one works or all exhausted
+        result = 'quota'
+        attempts = 0
+        while attempts < len(tts_combos):
+            if combo_idx in exhausted_combos:
+                combo_idx = (combo_idx + 1) % len(tts_combos)
+                attempts += 1
+                continue
+
+            tts_client, tts_model = tts_combos[combo_idx]
+            result = generate_tts(word_profile, tts_client=tts_client, tts_model=tts_model)
+
+            if result == 'ok':
+                logging.info(f"  ✓ using {tts_model} (combo {combo_idx})")
+                # Rotate to next combo for next word
+                combo_idx = (combo_idx + 1) % len(tts_combos)
+                break
+            elif result == 'quota':
+                logging.warning(f"  ✗ quota exhausted on {tts_model} (combo {combo_idx})")
+                exhausted_combos.add(combo_idx)
+                combo_idx = (combo_idx + 1) % len(tts_combos)
+                attempts += 1
+            else:
+                # Other error, try next combo
+                combo_idx = (combo_idx + 1) % len(tts_combos)
+                attempts += 1
+
+        if result == 'ok':
             update_csv_timestamp(args.csv, word, 'tts_1_timestamp')
             update_csv_timestamp(args.csv, word, 'tts_2_timestamp')
             update_csv_timestamp(args.csv, word, 'tts_3_timestamp')
             tts_count += 1
         else:
-            logging.warning("Quota hit - stopping TTS pass")
+            if len(exhausted_combos) >= len(tts_combos):
+                logging.warning("All TTS model/key combos exhausted - stopping TTS pass")
+            else:
+                logging.warning("TTS failed - stopping TTS pass")
             break
 
     logging.info(f"✓ TTS created: {tts_count}\n")

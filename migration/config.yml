@@ -129,8 +129,9 @@ gemini:
   image_aspect_ratio: "1:1"  # Options: 1:1, 16:9, 4:3, 3:2, 9:16, 3:4, 2:3, 5:4, 4:5, 21:9
   image_size: "1K"  # Options: 1K, 2K, 4K
 
-  # Text-to-speech
-  tts_model: "gemini-2.5-flash-preview-tts"
+  # Text-to-speech (rotate API keys to maximize quota)
+  tts_models:
+    - "gemini-2.5-flash-preview-tts"
   tts_voices:  # 8 main voices (4 male, 4 female), will be randomly selected
     - Zephyr
     - Puck
