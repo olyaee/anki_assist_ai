@@ -246,14 +246,19 @@ def generate_tts(word_profile, tts_client=None, tts_model=None):
         word = word_profile['german_word']
         normalized = sanitize_filename(normalize_word(word))
 
-        example_1 = files_dir / f"{normalized}_example_1.wav"
-        if example_1.exists():
-            return 'ok'
-
         use_client = tts_client or client
         use_model = tts_model or config['gemini']['tts_models'][0]
         voice = random.choice(config['gemini']['tts_voices'])
         examples = word_profile.get('examples', [])
+
+        # Check if all expected files already exist
+        all_exist = all(
+            (files_dir / f"{normalized}_example_{i+1}.wav").exists()
+            for i, ex in enumerate(examples[:3])
+            if ex.get('german_example', '')
+        )
+        if all_exist:
+            return 'ok'
 
         for idx, example in enumerate(examples[:3]):
             text = example.get('german_example', '')
@@ -261,6 +266,8 @@ def generate_tts(word_profile, tts_client=None, tts_model=None):
                 continue
 
             audio_path = files_dir / f"{normalized}_example_{idx+1}.wav"
+            if audio_path.exists():
+                continue
 
             response = use_client.models.generate_content(
                 model=use_model,
@@ -298,7 +305,16 @@ def generate_tts(word_profile, tts_client=None, tts_model=None):
             if idx < 2:
                 time.sleep(7)
 
-        return 'ok'
+        # Only return 'ok' if all expected files now exist
+        all_created = all(
+            (files_dir / f"{normalized}_example_{i+1}.wav").exists()
+            for i, ex in enumerate(examples[:3])
+            if ex.get('german_example', '')
+        )
+        if all_created:
+            return 'ok'
+        logging.warning(f"TTS incomplete for {word} - some files missing")
+        return 'error'
     except Exception as e:
         err_str = str(e)
         if '429' in err_str or 'RESOURCE_EXHAUSTED' in err_str:
